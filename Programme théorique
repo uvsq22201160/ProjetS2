@@ -1,0 +1,14 @@
+Fonction : 
+- crée une fonction qui prend des couleurs au hasard (prédéfinis dans une liste) et les place dans un ordre au hasard (blue, yellow,...) -> dans une liste par exemple
+- demamander à l'utilisateur d'entrer 4 couleurs (à chaque essai) -> si couleur entrer n'est pas dans la liste redemander en signalant une erreur
+- si couleur bien plaçé -> +1 dans une variable (remettre à zéro la variable à chaque essai)
+- pareil pour les couleurs mal plaçées
+- arréter le jeu si : plus de 10 essais ou code trouvé
+
+
+Interface :
+- créer une grille 
+- créer une grille avec couleurs cachées
+- créer des pions de couleurs pour les couleurs bien plaçés et mal plaçés
+- montrer à quoi correspondent ces couleurs
+- créer les couleurs à partir des noms donnés
