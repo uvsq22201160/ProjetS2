@@ -64,17 +64,20 @@ def Help():
     bienPlace = tk.Label(fenetre_help, text=": correspond aux pions BIEN plaçés.", font = ("helvetica", "10"), bg='papaya whip').place(x=25, y=90)
     malPlace = tk.Label(fenetre_help, text=": correspond aux pions MAL plaçés.", font = ("helvetica", "10"), bg='papaya whip').place(x=25, y=190)
 
+
+### Fonction retour ###
+def Retour(essais):
+    essais += 1
+
 ### Fonction victoire ###
 def Victoire():
-    canvas.delete("all")
-    victoire = tk.Label(fenetre, text="Vous avez gagné(e) !", font = ("helvetica", "50"), bg='papaya whip')
-    victoire.grid(column=0, row=0, pady=50)
+    canvas.delete('all')
+    victoire = tk.Label(fenetre, text="Vous avez gagné(e) !", font = ("helvetica", "30"), bg='papaya whip').place(x=10, y=200)
 
 ### Fonction défaite ###
 def Defaite():
-    canvas.delete("all")
-    defaite = tk.Label(fenetre, text="Vous avez perdu(e)",font = ("helvetica", "50"), bg='papaya whip')
-    defaite.grid(column=0, row=0, pady=50)
+    canvas.delete('all')
+    defaite = tk.Label(fenetre, text="Vous avez perdu(e) !",font = ("helvetica", "30"), bg='papaya whip').place(x=10, y=200)
     
 ### Fonction un joueur ###
 def unJoueur():
@@ -86,8 +89,9 @@ def unJoueur():
     pions = [0, 0, 0, 0]
     for i in range(4):
         couleurs_grille.append(Liste_couleur[rd.randint(0,7)])
-    for loop in range(11):
-        essais_restants = tk.Label(text="essais restant(s) : "+str(essais), font = ("helvetica", "8"), bg='papaya whip').place(x=10,y=10)
+    while essais > 0 :
+        retour = tk.Button(text="←", font=("helvetica", "8"), command=lambda : Retour(essais)).place(x=10, y=10)
+        essais_restants = tk.Label(text="essais restant(s) :" + str(essais), font=("helvetica", "8"), bg='papaya whip').place(x=10, y=320)
         x1, x2, y1, y2 = 50, 110, 100, 150
         x3, x4, y3, y4 = 20, 30, 280, 290
         for i in range(colonne):
@@ -99,9 +103,6 @@ def unJoueur():
             x1, x2 = x1+140, x2+140
         if couleurs_joueur == couleurs_grille:
             Victoire()
-            continue
-        elif essais == 0:
-            Defaite()
             continue
         else:
             bienPlace = 0
@@ -119,13 +120,10 @@ def unJoueur():
         bien_place(bienPlace, essais)
         mal_place(malPlace, essais)
         couleurs_joueur = []
-        essais -= 1
-    
-    
-
-
+        essais = essais - 1
+    Defaite()
 
 
 unJoueur()
-fenetre_help.mainloop()
 fenetre.mainloop()
+fenetre_help.mainloop()
