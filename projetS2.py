@@ -1,6 +1,6 @@
 import tkinter as tk
 import random as rd
-import time
+
 
 
 Liste_couleur = ['blue', 'green', 'white', 'yellow', 'purple', 'orange', 'red', 'black']
@@ -20,6 +20,8 @@ canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='papaya whip')
 canvas.grid()
 
 ### Création de la grille principale ###
+
+
 def grille():
     x1, x2, y1, y2 = 10, 150, 50, 200
     for loop in range(colonne):
@@ -60,7 +62,7 @@ def Help():
     couleur = tk.Label(fenetre_help, text='Couleurs : ', font = ("helvetica", "8"), bg='papaya whip').place(x=10, y=20)
     listeCouleurs = tk.Label(fenetre_help, text=Texte_couleur, font = ("helvetica", "8"), bg='papaya whip').place(x=70, y=20)
     canvas.create_oval((10,95),(20,105), fill='red')
-    canvas.create_oval((10,195),(20,205), fill='white')
+    canvas.create_oval((10, 195),(20,205), fill='white')
     bienPlace = tk.Label(fenetre_help, text=": correspond aux pions BIEN plaçés.", font = ("helvetica", "10"), bg='papaya whip').place(x=25, y=90)
     malPlace = tk.Label(fenetre_help, text=": correspond aux pions MAL plaçés.", font = ("helvetica", "10"), bg='papaya whip').place(x=25, y=190)
 
@@ -126,4 +128,3 @@ def unJoueur():
 
 unJoueur()
 fenetre.mainloop()
-fenetre_help.mainloop()
