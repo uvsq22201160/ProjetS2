@@ -22,6 +22,7 @@ LISTE_JEU_COMPLET = []
 LISTE_COULEURS = []
 LISTE_BOUTTONS = [0]*10
 LISTE_HASARD = []
+CERCLE = [[]]
 
 # Création de la fenêtre #
 
@@ -42,6 +43,9 @@ mode_deux_joueurs.place(x=6, y=5)
 
 retour = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 retour.place(x=10, y=5)
+
+menu = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+menu.place(x=40, y=5)
 
 x=0
 for i in range(10):
@@ -76,38 +80,52 @@ def Defaite():
    
 
 
+
+# Boutton Menu #
+
+def Menu():
+    global LISTE_BOUTTONS
+    canvas.delete("all")
+    retour.destroy()
+    for i in range(10):
+        LISTE_BOUTTONS[i].destroy()
+
+    NV_TRES_FACILE = tk.Button(text="Très facile", command=tresFacile, font=("Helvetica", "10"), bg="brown")
+    NV_TRES_FACILE.grid(row=1, column=4, columnspan=2)
+
+    NV_FACILE = tk.Button(text="Facile", command=Facile, font=("Helvetica", "10"), bg="brown")
+    NV_FACILE.grid(row=3, column=4, columnspan=2)
+
+    NV_MOYEN = tk.Button(text="Moyen", command=Moyen, font=("Helvetica", "10"), bg="brown")
+    NV_MOYEN.grid(row=5, column=4, columnspan=2)
+
+    NV_DIFFICILE = tk.Button(text="Difficile", command=Difficile, font=("Helvetica", "10"), bg="brown")
+    NV_DIFFICILE.grid(row=7, column=4, columnspan=2)
+
+
 # Boutton retour #
 
 def Retour():
     global LISTE_JEU_COMPLET
     global LISTE_JEU
+    global CERCLE
     colonne = len(LISTE_JEU_COMPLET) % 4
     ligne = int(len(LISTE_JEU_COMPLET) // 4)
 
     if LISTE_JEU_COMPLET != []:
-        if len(LISTE_JEU_COMPLET) % 4 == 0:
-            if colonne == 0:
-                for i in range(4):
-                    canvas.delete(str(ligne-1)+str(i+1))
-                    LISTE_JEU[ligne-1].pop()
-                    LISTE_JEU_COMPLET.pop()
-            else:
-                for j in range(colonne):
-                    canvas.delete(str(ligne-1)+str(j+1))
-                    LISTE_JEU[ligne-1].pop()
-                    LISTE_JEU_COMPLET.pop()
+        if colonne == 0:
+            for i in range(4):
+                canvas.delete(CERCLE[ligne-1][i])
+                LISTE_JEU[ligne-1].pop()
+                LISTE_JEU_COMPLET.pop()
         else:
-            if colonne == 0:
-                for k in range(4):
-                    canvas.delete(str(ligne)+str(k+1))
-                    LISTE_JEU[ligne].pop()
-                    LISTE_JEU_COMPLET.pop()
-            else:
-                for l in range(colonne):
-                    canvas.delete(str(ligne)+str(l+1))
-                    LISTE_JEU[ligne].pop()
-                    LISTE_JEU_COMPLET.pop()
-    
+            for j in range(colonne):
+                canvas.delete(CERCLE[ligne][j])
+                LISTE_JEU[ligne].pop()
+                LISTE_JEU_COMPLET.pop()
+        
+       
+
     
 
 
@@ -135,6 +153,7 @@ def Jeu(couleur):
     global LISTE_JEU_COMPLET
     global LISTE_JEU
     global LISTE_HASARD
+    global CERCLE
     LISTE_JEU_COMPLET.append(couleur)
     colonne = len(LISTE_JEU_COMPLET) % 4
     ligne = int(len(LISTE_JEU_COMPLET) // 4)
@@ -147,12 +166,12 @@ def Jeu(couleur):
             LISTE_JEU[ligne].append(couleur)
             if NB_ESSAIS == 12:
                 x1, x2, y1, y2 = 30, 60, 55+40*(ligne), 85+40*(ligne)
-                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne)+"1")
+                CERCLE[ligne][0] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
         elif colonne != 0:
             LISTE_JEU[ligne].append(couleur)
             if NB_ESSAIS == 12:
                 x1, x2, y1, y2 = 30+70*(colonne-1), 60+70*(colonne-1), 55+40*(ligne), 85+40*(ligne)
-                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne)+str(colonne))
+                CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
 
             elif NB_ESSAIS == 10:
                 pass
@@ -162,11 +181,12 @@ def Jeu(couleur):
         else :
             colonne = 3
             LISTE_JEU[ligne-1].append(couleur)
+            # test #
             print(LISTE_JEU[ligne-1], LISTE_HASARD)
-            print(LISTE_JEU[ligne-1] == LISTE_HASARD, ligne)
+            # test #
             if NB_ESSAIS == 12:
                 x1, x2, y1, y2 = 30+70*(colonne), 60+70*(colonne), 55+40*(ligne-1), 85+40*(ligne-1)
-                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne-1)+"4")
+                CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne-1)+"4")
                 if LISTE_JEU[ligne-1] == LISTE_HASARD:
                     Victoire()
                 else:
@@ -198,11 +218,14 @@ def unJoueur(couleurs, essais, intervalle):
     global LISTE_JEU_COMPLET
     global MODE
     global LISTE_HASARD
+    global CERCLE
+    CERCLE = [[0]*4 for x in range(NB_ESSAIS)]
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
    
     # Création du jeu #
     retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
+    menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
 
     a = 0
     for i in range(4):
@@ -214,7 +237,7 @@ def unJoueur(couleurs, essais, intervalle):
     y2 = y1+intervalle
     for i in range(essais):
         for j in range(4):
-            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
+            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown", tags="rectangle")
             x1, x2 = x2, x2+70
         x1, x2 = 10, 80
         y1, y2 = y2, y2+intervalle
@@ -249,6 +272,8 @@ def unJoueur(couleurs, essais, intervalle):
 def deuxJoueurs(couleurs, essais, intervalle):
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
+
+
 
 
 # Création des modes #
