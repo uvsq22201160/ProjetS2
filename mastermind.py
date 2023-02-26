@@ -17,7 +17,7 @@ NB_ESSAIS = 0
 INTERVALLE = 0 # intervalle nécessaire entre les différentes lignes de la grille
 
 
-LISTE_JEU = []
+LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_COULEURS = []
 LISTE_BOUTTONS = [0]*10
@@ -30,19 +30,36 @@ WIDTH = 600
 fenetre = tk.Tk()
 fenetre.title("Mastermind")
 canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='papaya whip')
-canvas.grid(row=0, column=0, rowspan=9, columnspan=2)
+canvas.grid(row=0, column=0, rowspan=9, columnspan=10)
 
-mode_un_joueur = tk.Button(text=" ", font=("Helvetica", "1"), bg="papaya whip")
-mode_un_joueur.grid(row=2, column=0, columnspan=2)
-mode_deux_joueurs = tk.Button(text=" ", font=("Helvetica", "1"), bg="papaya whip")
-mode_deux_joueurs.grid(row=6, column=0, columnspan=2)
+
+# Création des bouttons initiales #
+
+mode_un_joueur = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+mode_un_joueur.place(x=5, y=5)
+mode_deux_joueurs = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+mode_deux_joueurs.place(x=6, y=5)
+
+retour = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+retour.place(x=10, y=5)
+
+x=0
+for i in range(10):
+    LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+    LISTE_BOUTTONS[i].grid(row=8, column=x)
+    x += 1
 
 
 
 # Canvas victoire #
 
 def Victoire():
-    Gagne = tk.Label(text="Vous avez gagné!", font=("Helvetica", "8"),).place(x=10, y=10)
+    global NB_ESSAIS
+    global LISTE_BOUTTONS
+    global LISTE_COULEURS
+    for i in range(10):
+        LISTE_BOUTTONS[i].destroy()
+    Gagne = tk.Label(text="Vous avez gagné!", font=("Helvetica", "18"), bg="papaya whip").place(x=320, y=300)
     
 
 
@@ -50,19 +67,70 @@ def Victoire():
 # Canvas défaite #
 
 def Defaite():
-    Defaite = tk.Label(text="Vous avez perdu!", font=("Helvetica", "8"),).place(x=10, y=10)
+    global NB_ESSAIS
+    global LISTE_BOUTTONS
+    global LISTE_COULEURS
+    for i in range(10):
+        LISTE_BOUTTONS[i].destroy()
+    Defaite = tk.Label(text="Vous avez perdu!", font=("Helvetica", "8"),).place(x=320, y=300)
    
+
+
+# Boutton retour #
+
+def Retour():
+    global LISTE_JEU_COMPLET
+    global LISTE_JEU
+    colonne = len(LISTE_JEU_COMPLET) % 4
+    ligne = int(len(LISTE_JEU_COMPLET) // 4)
+
+    if LISTE_JEU_COMPLET != []:
+        if len(LISTE_JEU_COMPLET) % 4 == 0:
+            if colonne == 0:
+                for i in range(4):
+                    canvas.delete(str(ligne-1)+str(i+1))
+                    LISTE_JEU[ligne-1].pop()
+                    LISTE_JEU_COMPLET.pop()
+            else:
+                for j in range(colonne):
+                    canvas.delete(str(ligne-1)+str(j+1))
+                    LISTE_JEU[ligne-1].pop()
+                    LISTE_JEU_COMPLET.pop()
+        else:
+            if colonne == 0:
+                for k in range(4):
+                    canvas.delete(str(ligne)+str(k+1))
+                    LISTE_JEU[ligne].pop()
+                    LISTE_JEU_COMPLET.pop()
+            else:
+                for l in range(colonne):
+                    canvas.delete(str(ligne)+str(l+1))
+                    LISTE_JEU[ligne].pop()
+                    LISTE_JEU_COMPLET.pop()
+    
+    
+
 
 
 # Création des pions bien plaçés et mal plaçés #
 
+def bienPlace(n):
+    x1, x2, y1, y2 = 300, 320, 50, 70
+    for i in range(n):
+        canvas.create_oval((x1,y1),(x2,y2), fill="red", tags="bienPlacé")
+        x1, x2 = x1+40, x2+40
 
+def malPlace(n):
+    x1, x2, y1, y2 = 300, 320, 90, 110
+    for i in range(n):
+        canvas.create_oval((x1,y1),(x2,y2), fill="white", tags="malPlacé")
+        x1, x2 = x1+40, x2+40
 
 
 
 # Création partie interactive #
 
-def Cercle(couleur):
+def Jeu(couleur):
     global NB_ESSAIS
     global LISTE_JEU_COMPLET
     global LISTE_JEU
@@ -70,35 +138,56 @@ def Cercle(couleur):
     LISTE_JEU_COMPLET.append(couleur)
     colonne = len(LISTE_JEU_COMPLET) % 4
     ligne = int(len(LISTE_JEU_COMPLET) // 4)
-    bien_place = 0
-    mal_place = 0
-
+    
     if ligne > NB_ESSAIS:
         Defaite()
-
     else:
-        if colonne != 0:
-            LISTE_JEU[ligne][colonne-1] = couleur
+        if colonne == 1:
+            LISTE_JEU.append([])
+            LISTE_JEU[ligne].append(couleur)
+            if NB_ESSAIS == 12:
+                x1, x2, y1, y2 = 30, 60, 55+40*(ligne), 85+40*(ligne)
+                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne)+"1")
+        elif colonne != 0:
+            LISTE_JEU[ligne].append(couleur)
             if NB_ESSAIS == 12:
                 x1, x2, y1, y2 = 30+70*(colonne-1), 60+70*(colonne-1), 55+40*(ligne), 85+40*(ligne)
-                canvas.create_oval(x1, y1, x2, y2, fill=couleur)
+                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne)+str(colonne))
+
             elif NB_ESSAIS == 10:
                 pass
             else:
                 pass
-
+        
         else :
             colonne = 3
-            LISTE_JEU[ligne-1][colonne] = couleur
+            LISTE_JEU[ligne-1].append(couleur)
+            print(LISTE_JEU[ligne-1], LISTE_HASARD)
+            print(LISTE_JEU[ligne-1] == LISTE_HASARD, ligne)
             if NB_ESSAIS == 12:
                 x1, x2, y1, y2 = 30+70*(colonne), 60+70*(colonne), 55+40*(ligne-1), 85+40*(ligne-1)
-                canvas.create_oval(x1, y1, x2, y2, fill=couleur)
+                canvas.create_oval(x1, y1, x2, y2, fill=couleur, tags=str(ligne-1)+"4")
+                if LISTE_JEU[ligne-1] == LISTE_HASARD:
+                    Victoire()
+                else:
+                    bien_place = 0
+                    mal_place = 0
+                    if LISTE_JEU[0][0] != ' ':
+                        canvas.delete("bienPlacé")
+                        canvas.delete("malPlacé")
+                    for j in range(4):
+                        if (LISTE_JEU[ligne-1][j] == LISTE_HASARD[j]):
+                            bien_place += 1
+                        elif (LISTE_JEU[ligne-1][j] in LISTE_HASARD) and (LISTE_JEU[ligne-1][j] != LISTE_HASARD[j]):
+                            mal_place += 1
+            
+                    bienPlace(bien_place)
+                    malPlace(mal_place)
                     
             elif NB_ESSAIS == 10:
                 pass
             else:
                 pass
- 
         
         
 
@@ -108,61 +197,35 @@ def unJoueur(couleurs, essais, intervalle):
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global MODE
-    LISTE_JEU = [[' ']*4 for x in range(essais)]
+    global LISTE_HASARD
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
-
-    
+   
     # Création du jeu #
-    LISTE_HASARD = []
+    retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
+
+    a = 0
     for i in range(4):
         a = rd.randint(0, len(couleurs)-1)
         LISTE_HASARD.append(couleurs[a])
-    print(LISTE_HASARD)
-
-    ligne = int(len(LISTE_JEU_COMPLET) // 4)
-    colonne = len(LISTE_JEU_COMPLET) % 4
-    
 
     # Création de la grille #
     x1, x2, y1 = 10, 80, 50
     y2 = y1+intervalle
     for i in range(essais):
         for j in range(4):
-            canvas.create_rectangle((x1,y1), (x2,y2), fill="saddle brown")
+            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
             x1, x2 = x2, x2+70
         x1, x2 = 10, 80
         y1, y2 = y2, y2+intervalle
     
-    # fonctions des différents modes #
+    # Bouttons différents modes #
     if MODE == "Tres facile":
-        LISTE_BOUTTONS[0] = tk.Button(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0])).place(x=300, y=560)
-        LISTE_BOUTTONS[1] = tk.Button(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1])).place(x=320, y=560)
-        LISTE_BOUTTONS[2] = tk.Button(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2])).place(x=340, y=560)
-        LISTE_BOUTTONS[3] = tk.Button(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3])).place(x=360, y=560)
-        if colonne == 0:
-            if LISTE_JEU[ligne-1] == LISTE_HASARD:
-                Victoire()
-            else:
-                bien_place = 0
-                mal_place = 0
-                if LISTE_JEU[0][0] != ' ':
-                    canvas.delete("bienPlacé")
-                    canvas.delete("malPlacé")
-                for j in range(4):
-                    if (LISTE_JEU[ligne-1][j] == LISTE_HASARD):
-                        bien_place += 1
-                    elif (LISTE_JEU[ligne-1][j] in LISTE_HASARD) and (LISTE_JEU[ligne-1][l] != LISTE_HASARD[l]):
-                        mal_place += 1
-
-                a1, a2, b1, b2 = 300, 340, 50, 90
-                for k in range(bien_place):
-                    canvas.create_oval((a1,b1),(a2,b2), fill="red", tags="bienPlacé")
-                    a1, a2 = a1+40, a2+40
-                for l in range(mal_place):
-                    b1, b2 = 110, 150
-                    canvas.create_oval((a1,b1),(a2,b2), fill="white", tags="malPlacé")
-                    a1, a2 = a1+40, a2+40
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        
         
 
         
@@ -206,7 +269,9 @@ def tresFacile():
     NV_DIFFICILE.destroy()
 
     mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE), font=("Helvetica", "16"), bg="brown")
+    mode_un_joueur.grid(row=2, column=4, columnspan=2)
     mode_deux_joueurs.configure(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE), font=("Helvetica", "16"), bg="brown")
+    mode_deux_joueurs.grid(row=6, column=4, columnspan=2)
 
 
 
@@ -250,16 +315,16 @@ def Difficile():
 # Création du menu #
 
 NV_TRES_FACILE = tk.Button(text="Très facile", command=tresFacile, font=("Helvetica", "10"), bg="brown")
-NV_TRES_FACILE.grid(row=1, column=0, columnspan=2)
+NV_TRES_FACILE.grid(row=1, column=4, columnspan=2)
 
 NV_FACILE = tk.Button(text="Facile", command=Facile, font=("Helvetica", "10"), bg="brown")
-NV_FACILE.grid(row=3, column=0, columnspan=2)
+NV_FACILE.grid(row=3, column=4, columnspan=2)
 
 NV_MOYEN = tk.Button(text="Moyen", command=Moyen, font=("Helvetica", "10"), bg="brown")
-NV_MOYEN.grid(row=5, column=0, columnspan=2)
+NV_MOYEN.grid(row=5, column=4, columnspan=2)
 
 NV_DIFFICILE = tk.Button(text="Difficile", command=Difficile, font=("Helvetica", "10"), bg="brown")
-NV_DIFFICILE.grid(row=7, column=0, columnspan=2)
+NV_DIFFICILE.grid(row=7, column=4, columnspan=2)
 
 
 
