@@ -63,14 +63,6 @@ for i in range(10):
     LISTE_BOUTTONS[i].grid(row=8, column=x)
     x += 1
 
-y = 0
-for j in range(10):
-    LISTE_BOUTTONS2[j] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
-    LISTE_BOUTTONS2[j].grid(row=8, column=y)
-    y += 1
-    
-
-    
 
 
 # Canvas victoire #
@@ -136,115 +128,6 @@ def Retour():
                 canvas.delete("bienPlacé")
                 canvas.delete("malPlacé")       
 
-
-'''
-# Création des pions du code secret #
-
-def Cercle(couleur):
-    global NB_ESSAIS
-    global LISTE_JEU_COMPLET
-    global LISTE_JEU
-    global LISTE_CODE
-    global CERCLE2
-    global CODE
-    global INTERVALLE_X
-
-    colonne = len(LISTE_JEU_COMPLET) % CODE
-    
-    if colonne == 1:
-        LISTE_CODE.append(couleur)
-        x1 = 10 + (INTERVALLE_X/2 - 10)
-        x2 = 10 + (INTERVALLE_X/2 + 10)
-        y1 = 400 + (INTERVALLE_Y/2 - 10) 
-        y2 = 400 + (INTERVALLE_Y/2 + 10) 
-        CERCLE2[0] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-    elif colonne != 0:
-        LISTE_CODE.append(couleur)
-        x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne-1)
-        x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne-1)
-        y1 = 400 + (INTERVALLE_Y/2 - 10) 
-        y2 = 400 + (INTERVALLE_Y/2 + 10) 
-        CERCLE2[colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-    
-    else :
-        colonne = CODE - 1
-        LISTE_CODE.append(couleur)
-        x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne)
-        x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne)
-        y1 = 400 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)
-        y2 = 400 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)
-        CERCLE2[colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-        
-
-
-# Création du code secret #
-
-def Code(couleurs):
-    global NB_ESSAIS
-    global INTERVALLE_X
-    global INTERVALLE_Y
-    global CODE
-    global MODE
-    global CERCLE2
-    global LISTE_COULEURS
-
-
-    code.configure(text="Le code secret :", font=("Helvetica", "10"))
-    x1, y1 = 10, 400
-    x2 = x1+INTERVALLE_X
-    y2 = y1+INTERVALLE_Y
-    for loop in range(CODE):
-            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
-            x1, x2 = x2, x2+INTERVALLE_X
-
-    # Différents modes #
-    if MODE == "Tres facile":
-        CERCLE2 = [0]*6
-        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        
-
-    elif MODE == "Facile":
-        CERCLE2 =[0]*6
-        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        
-
-    elif MODE == "Classique":
-        CERCLE2 = [0]*8
-        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        LISTE_BOUTTONS2[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
-        LISTE_BOUTTONS2[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
-        
-
-    else:
-        CERCLE2 = [0]*10
-        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        LISTE_BOUTTONS2[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
-        LISTE_BOUTTONS2[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
-        LISTE_BOUTTONS2[8].configure(text="●", font=("Helvetica", "8"), bg=couleurs[8], command=lambda : Cercle(couleurs[8]))
-        LISTE_BOUTTONS2[9].configure(text="●", font=("Helvetica", "8"), bg=couleurs[9], command=lambda : Cercle(couleurs[9]))
-        
-    
-'''
 
 
 # Création des pions bien plaçés et mal plaçés #
@@ -329,7 +212,6 @@ def Jeu(couleur):
 
 
 
-
 # Création fonction deux joueurs #
 
 def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
@@ -344,28 +226,8 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
    
-    
-    # Création du jeu (code secret) #
     menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
-    
-    for a in range(CODE):
-        print(couleurs)
-        couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
-        while not (couleur_secret in couleurs):
-            print(couleurs)
-            couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
-        LISTE_CODE.append(couleur_secret)
-
-
-    #canvas.delete("all")
-    #code.destroy()
-
-    #for a in range(10):
-    #    LISTE_BOUTTONS2[a].destroy()
-    
     retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
-    
-
 
     # Création de la grille #
     x1, y1 = 10, 50
@@ -378,6 +240,15 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
         y1, y2 = y2, y2+intervalle_y
         x1 = 10
         x2 = x1+intervalle_x
+
+    # Création du jeu (code secret) #
+    for a in range(CODE):
+        print(couleurs)
+        couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
+        while not (couleur_secret in couleurs):
+            print(couleurs)
+            couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
+        LISTE_CODE.append(couleur_secret)
 
     
     # Différents modes #
