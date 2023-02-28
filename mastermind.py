@@ -25,6 +25,8 @@ LISTE_BOUTTONS = [0]*8
 LISTE_CODE = []
 CERCLE = [[]]
 CERCLE2 = []
+PIONS_BP = [[0]*4 for x in range(12)]
+PIONS_MP = [[0]*4 for x in range(12)]
 
 
 # Création de la fenêtre #
@@ -62,6 +64,9 @@ for i in range(8):
     LISTE_BOUTTONS[i].grid(row=8, column=x)
     x += 1
 
+for j in range(12):
+    for k in range(4):
+        PIONS_BP[j][k] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
 
 
 # Canvas victoire #
@@ -73,7 +78,7 @@ def Victoire():
     global LISTE_COULEURS
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
-    Gagne = tk.Label(text="Vous avez gagné!", font=("Helvetica", "18"), bg="papaya whip").place(x=320, y=300)
+    Gagne = tk.Label(text="Vous avez gagné(e) !", font=("Helvetica", "18"), bg="papaya whip").place(x=360, y=300)
     
 
 
@@ -87,7 +92,7 @@ def Defaite():
     global LISTE_COULEURS
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
-    Defaite = tk.Label(text="Vous avez perdu!", font=("Helvetica", "8"),).place(x=320, y=300)
+    Perdu = tk.Label(text="Vous avez perdu(e) !", font=("Helvetica", "18"), bg="papaya whip").place(x=360, y=300)
    
 
 
@@ -115,35 +120,45 @@ def Retour():
         if colonne == 0:
             for i in range(CODE):
                 canvas.delete(CERCLE[ligne-1][i])
+                canvas.delete(PIONS_BP[ligne-1][i])
+                canvas.delete(PIONS_MP[ligne-1][i])
                 LISTE_JEU[ligne-1].pop()
                 LISTE_JEU_COMPLET.pop()
-                canvas.delete("bienPlacé")
-                canvas.delete("malPlacé")
+                
         else:
             for j in range(colonne):
                 canvas.delete(CERCLE[ligne][j])
+                canvas.delete(PIONS_BP[ligne][j])
+                canvas.delete(PIONS_MP[ligne][j])    
                 LISTE_JEU[ligne].pop()
                 LISTE_JEU_COMPLET.pop()
-                canvas.delete("bienPlacé")
-                canvas.delete("malPlacé")       
+                 
 
 
 
 # Création des pions bien plaçés et mal plaçés #
 
-def bienPlace(n):
+def bienPlace(n, ligne):
     '''Compte les pions bien plaçés et les affiches'''
-    x1, x2, y1, y2 = 300, 320, 50, 70
+    global INTERVALLE_Y
+    global PIONS_BP
+    global PIONS_MP
+    x1, x2 = 300, 310
+    y1 = 50 + (INTERVALLE_Y/4 - 5) + (INTERVALLE_Y)*(ligne-1)
+    y2 = 50 + (INTERVALLE_Y/4 + 5) + (INTERVALLE_Y)*(ligne-1)
     for i in range(n):
-        canvas.create_oval((x1,y1),(x2,y2), fill="red", tags="bienPlacé")
-        x1, x2 = x1+40, x2+40
+        PIONS_BP[ligne-1][i] = canvas.create_oval((x1,y1),(x2,y2), fill="red")
+        x1, x2 = x1+15, x2+15
+    
 
-def malPlace(n):
+def malPlace(n, ligne):
     '''Compte les pions mal plaçés et les affiches'''
-    x1, x2, y1, y2 = 300, 320, 90, 110
+    x1, x2 = 300, 310
+    y1 = 50 + (INTERVALLE_Y*(3/4) - 5) + (INTERVALLE_Y)*(ligne-1)
+    y2 = 50 + (INTERVALLE_Y*(3/4) + 5) + (INTERVALLE_Y)*(ligne-1)
     for i in range(n):
-        canvas.create_oval((x1,y1),(x2,y2), fill="white", tags="malPlacé")
-        x1, x2 = x1+40, x2+40
+        PIONS_MP[ligne-1][i] = canvas.create_oval((x1,y1),(x2,y2), fill="white")
+        x1, x2 = x1+15, x2+15
 
 
 
@@ -163,7 +178,7 @@ def Jeu(couleur):
     colonne = len(LISTE_JEU_COMPLET) % CODE
     ligne = int(len(LISTE_JEU_COMPLET) // CODE)
     
-    if ligne > NB_ESSAIS:
+    if ligne >= NB_ESSAIS:
         Defaite()
     else:
         if colonne == 1:
@@ -198,17 +213,15 @@ def Jeu(couleur):
             else:
                 bien_place = 0
                 mal_place = 0
-                if len(LISTE_JEU_COMPLET) != 0:
-                    canvas.delete("bienPlacé")
-                    canvas.delete("malPlacé")
                 for j in range(CODE):
                     if (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
                         bien_place += 1
                     elif (LISTE_JEU[ligne-1][j] in LISTE_CODE) and (LISTE_JEU[ligne-1][j] != LISTE_CODE[j]):
                         mal_place += 1
         
-                bienPlace(bien_place)
-                malPlace(mal_place)
+                bienPlace(bien_place, ligne)
+                malPlace(mal_place, ligne)
+                
         
         
 
@@ -225,6 +238,8 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
     global CERCLE
     global CODE
     global LISTE_COULEURS
+    global PIONS_BP
+    global PIONS_MP
 
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
@@ -232,17 +247,23 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
     menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
     retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
 
+    PIONS_BP = [[0]*4 for x in range(NB_ESSAIS)]
+    PIONS_MP = [[0]*4 for x in range(NB_ESSAIS)]
+
     # Création de la grille #
     x1, y1 = 10, 50
     x2 = x1+intervalle_x
     y2 = y1+intervalle_y
-    for i in range(essais):
-        for j in range(CODE):
+    for y in range(essais):
+        for z in range(CODE):
             canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
             x1, x2 = x2, x2+intervalle_x
         y1, y2 = y2, y2+intervalle_y
         x1 = 10
         x2 = x1+intervalle_x
+    
+    for i in range(NB_ESSAIS):
+        canvas.create_rectangle(289, 50+(intervalle_y*(i)), 360, 50+(intervalle_y*(i+1)))
 
     # Création du jeu (code secret) #
     for a in range(CODE):
@@ -304,6 +325,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     global LISTE_CODE
     global CERCLE
     global CODE
+    global PIONS_BP
+    global PIONS_MP
 
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
@@ -311,6 +334,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     # Création du jeu #
     retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
     menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
+    PIONS_BP = [[0]*4 for x in range(NB_ESSAIS)]
+    PIONS_MP = [[0]*4 for x in range(NB_ESSAIS)]
 
     a = 0
     for i in range(CODE):
@@ -330,6 +355,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         x1 = 10
         x2 = x1+intervalle_x
 
+    for i in range(NB_ESSAIS):
+        canvas.create_rectangle(289, 50+(intervalle_y*(i)), 360, 50+(intervalle_y*(i+1)))
     
     # Différents modes #
     if MODE == "Tres facile":
