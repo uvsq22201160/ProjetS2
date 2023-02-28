@@ -3,7 +3,7 @@ import random as rd
 
 ####################################################################################################################
 #                                                                                                                  #
-#   Mastermind   :    Gaël FERREIRA RODRIGUEZ  /     /      /                                                      #
+#   Mastermind   :    Gaël FERREIRA RODRIGUEZ  / Elise MOULIN    / César PITIGLIANO    /                           #
 #                                                                                                                  #
 ####################################################################################################################
 
@@ -21,8 +21,7 @@ CODE = 0
 LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_COULEURS = []
-LISTE_BOUTTONS = [0]*10
-LISTE_BOUTTONS2 = [0]*10
+LISTE_BOUTTONS = [0]*8
 LISTE_CODE = []
 CERCLE = [[]]
 CERCLE2 = []
@@ -58,7 +57,7 @@ code.grid(row=0, column=4, columnspan=2)
 
 
 x=0
-for i in range(10):
+for i in range(8):
     LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
     LISTE_BOUTTONS[i].grid(row=8, column=x)
     x += 1
@@ -72,7 +71,7 @@ def Victoire():
     global NB_ESSAIS
     global LISTE_BOUTTONS
     global LISTE_COULEURS
-    for i in range(10):
+    for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     Gagne = tk.Label(text="Vous avez gagné!", font=("Helvetica", "18"), bg="papaya whip").place(x=320, y=300)
     
@@ -86,7 +85,7 @@ def Defaite():
     global NB_ESSAIS
     global LISTE_BOUTTONS
     global LISTE_COULEURS
-    for i in range(10):
+    for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     Defaite = tk.Label(text="Vous avez perdu!", font=("Helvetica", "8"),).place(x=320, y=300)
    
@@ -334,15 +333,21 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     
     # Différents modes #
     if MODE == "Tres facile":
-        CERCLE = [[0]*6 for x in range(NB_ESSAIS)]
+        CERCLE = [[0]*4 for x in range(NB_ESSAIS)]
         LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
         LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
         LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
         LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
         
     elif MODE == "Facile":
+        CERCLE = [[0]*5 for x in range(NB_ESSAIS)]
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
+        
+    elif MODE == "Classique":
         CERCLE = [[0]*6 for x in range(NB_ESSAIS)]
         LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
         LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
@@ -350,8 +355,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
         LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
         LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        
-    elif MODE == "Classique":
+
+    else:
         CERCLE = [[0]*8 for x in range(NB_ESSAIS)]
         LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
         LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
@@ -361,24 +366,6 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
         LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
         LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
-
-    else:
-        CERCLE = [[0]*10 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
-        LISTE_BOUTTONS[8].configure(text="●", font=("Helvetica", "8"), bg=couleurs[8], command=lambda : Jeu(couleurs[8]))
-        LISTE_BOUTTONS[9].configure(text="●", font=("Helvetica", "8"), bg=couleurs[9], command=lambda : Jeu(couleurs[9]))
-
-        
-
-    
-
 
 
 
