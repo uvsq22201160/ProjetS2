@@ -68,6 +68,7 @@ for i in range(10):
 # Canvas victoire #
 
 def Victoire():
+    '''Détruis les boutons et affiche que le joueur a gagné(e)'''
     global NB_ESSAIS
     global LISTE_BOUTTONS
     global LISTE_COULEURS
@@ -81,6 +82,7 @@ def Victoire():
 # Canvas défaite #
 
 def Defaite():
+    '''Détruis les boutons et affiche que le joueur a perdu(e)'''
     global NB_ESSAIS
     global LISTE_BOUTTONS
     global LISTE_COULEURS
@@ -94,17 +96,15 @@ def Defaite():
 # Boutton Menu #
 
 def Menu():
-    global LISTE_BOUTTONS
-    canvas.delete("all")
-    retour.destroy()
-    for i in range(10):
-        LISTE_BOUTTONS[i].destroy()
+    '''Sauvegarde la partie si elle est en cours et relance le programme'''
+    
 
 
 
 # Boutton retour #
 
 def Retour():
+    '''Permet un retour en arrière (essais en plus) lors du jeu'''
     global LISTE_JEU_COMPLET
     global LISTE_JEU
     global CERCLE
@@ -133,12 +133,14 @@ def Retour():
 # Création des pions bien plaçés et mal plaçés #
 
 def bienPlace(n):
+    '''Compte les pions bien plaçés et les affiches'''
     x1, x2, y1, y2 = 300, 320, 50, 70
     for i in range(n):
         canvas.create_oval((x1,y1),(x2,y2), fill="red", tags="bienPlacé")
         x1, x2 = x1+40, x2+40
 
 def malPlace(n):
+    '''Compte les pions mal plaçés et les affiches'''
     x1, x2, y1, y2 = 300, 320, 90, 110
     for i in range(n):
         canvas.create_oval((x1,y1),(x2,y2), fill="white", tags="malPlacé")
@@ -149,6 +151,7 @@ def malPlace(n):
 # Création partie interactive #
 
 def Jeu(couleur):
+    '''Permet d'afficher les actions exerçés par le joueur et vérifie si le joueur à gagné(e) ou perdu(e)'''
     global NB_ESSAIS
     global LISTE_JEU_COMPLET
     global LISTE_JEU
@@ -215,6 +218,7 @@ def Jeu(couleur):
 # Création fonction deux joueurs #
 
 def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
+    '''Permet de démarrer le jeu à 2 joueurs'''
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global MODE
@@ -294,6 +298,7 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
 # Création fonction un joueur #
 
 def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
+    '''Permet de démarrer le jeu à 1 joueur'''
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global MODE
@@ -381,6 +386,7 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
 # Création des modes #
 
 def tresFacile():
+    '''Permet de démarrer le jeu en mode très facile'''
     global LISTE_COULEURS
     global NB_ESSAIS
     global INTERVALLE_Y
@@ -407,6 +413,7 @@ def tresFacile():
 
 
 def Facile():
+    '''Permet de démarrer le jeu en mode facile'''
     global LISTE_COULEURS
     global NB_ESSAIS
     global INTERVALLE_Y
@@ -431,6 +438,7 @@ def Facile():
     mode_deux_joueurs.grid(row=6, column=4, columnspan=2)
 
 def Classique():
+    '''Permet de démarrer le jeu en mode tclassique'''
     global LISTE_COULEURS
     global NB_ESSAIS
     global INTERVALLE_Y
@@ -456,6 +464,7 @@ def Classique():
 
 
 def IMPOSSIBLE():
+    '''Permet de démarrer le jeu en mode IMPOSSIBLE'''
     global LISTE_COULEURS
     global NB_ESSAIS
     global INTERVALLE_Y
