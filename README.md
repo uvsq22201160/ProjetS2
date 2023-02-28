@@ -4,6 +4,6 @@
 URL : https://github.com/uvsq22201160/ProjetS2/blob/main/mastermind.py
 
 # Groupe : LDDMP
-Gaël FERREIRA RODRIGUEZ, Elise MOULIN, César PTIGLIANO, Noel-Marie 
+Gaël FERREIRA RODRIGUEZ, Elise MOULIN, César PTIGLIANO, Noel-Marie N'dri
 
 
