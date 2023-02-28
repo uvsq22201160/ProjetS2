@@ -22,6 +22,7 @@ LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_COULEURS = []
 LISTE_BOUTTONS = [0]*10
+LISTE_BOUTTONS2 = [0]*10
 LISTE_CODE = []
 CERCLE = [[]]
 CERCLE2 = []
@@ -35,7 +36,7 @@ fenetre = tk.Tk()
 fenetre.title("Mastermind")
 canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='papaya whip')
 canvas.grid(row=0, column=0, rowspan=9, columnspan=10)
-#canvas2 = tk.Canvas(fenetre)
+
 
 
 
@@ -52,6 +53,9 @@ retour.place(x=10, y=5)
 menu = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 menu.place(x=40, y=5)
 
+code = tk.Label(text="", font=("Helvetica", "1"), bg="papaya whip")
+code.grid(row=0, column=4, columnspan=2)
+
 
 x=0
 for i in range(10):
@@ -59,6 +63,12 @@ for i in range(10):
     LISTE_BOUTTONS[i].grid(row=8, column=x)
     x += 1
 
+y = 0
+for j in range(10):
+    LISTE_BOUTTONS2[j] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
+    LISTE_BOUTTONS2[j].grid(row=8, column=y)
+    y += 1
+    
 
     
 
@@ -126,8 +136,8 @@ def Retour():
                 canvas.delete("bienPlacé")
                 canvas.delete("malPlacé")       
 
-'''
 
+'''
 # Création des pions du code secret #
 
 def Cercle(couleur):
@@ -145,25 +155,25 @@ def Cercle(couleur):
         LISTE_CODE.append(couleur)
         x1 = 10 + (INTERVALLE_X/2 - 10)
         x2 = 10 + (INTERVALLE_X/2 + 10)
-        y1 = 50 + (INTERVALLE_Y/2 - 10) 
-        y2 = 50 + (INTERVALLE_Y/2 + 10) 
-        CERCLE2[0] = canvas2.create_oval(x1, y1, x2, y2, fill=couleur)
+        y1 = 400 + (INTERVALLE_Y/2 - 10) 
+        y2 = 400 + (INTERVALLE_Y/2 + 10) 
+        CERCLE2[0] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
     elif colonne != 0:
         LISTE_CODE.append(couleur)
         x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne-1)
         x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne-1)
-        y1 = 50 + (INTERVALLE_Y/2 - 10) 
-        y2 = 50 + (INTERVALLE_Y/2 + 10) 
-        CERCLE2[colonne-1] = canvas2.create_oval(x1, y1, x2, y2, fill=couleur)
+        y1 = 400 + (INTERVALLE_Y/2 - 10) 
+        y2 = 400 + (INTERVALLE_Y/2 + 10) 
+        CERCLE2[colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
     
     else :
         colonne = CODE - 1
         LISTE_CODE.append(couleur)
         x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne)
         x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne)
-        y1 = 50 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)
-        y2 = 50 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)
-        CERCLE2[colonne] = canvas2.create_oval(x1, y1, x2, y2, fill=couleur)
+        y1 = 400 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)
+        y2 = 400 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)
+        CERCLE2[colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
         
 
 
@@ -178,80 +188,64 @@ def Code(couleurs):
     global CERCLE2
     global LISTE_COULEURS
 
-    # Création de la fenêtre #
-    HEIGHT = 310
-    WIDTH = 310
-    fenetre2 = tk.Tk()
-    fenetre2.title("Code secret")
-    canvas2.configure(fenetre2, height=HEIGHT, width=WIDTH, bg='papaya whip')
-    canvas2.grid(row=0, column=0, rowspan=3, columnspan=10)
 
-    label = tk.Label(fenetre2, text="Le code secret :", font=("Helvetica", "10"), bg="papaya whip")
-    label.grid(row=0, column=4, columnspan=2)
-
-    # Création de la grille #
-    x1, y1 = 10, 100
+    code.configure(text="Le code secret :", font=("Helvetica", "10"))
+    x1, y1 = 10, 400
     x2 = x1+INTERVALLE_X
     y2 = y1+INTERVALLE_Y
-    for j in range(CODE):
-        canvas2.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
-        x1, x2 = x2, x2+INTERVALLE_X
-    
-    LISTE_BOUTTONS2 = [0]*len(LISTE_COULEURS)
-    x = 0
-    for i in range(len(LISTE_COULEURS)):
-        LISTE_BOUTTONS2[i] = tk.Button(fenetre2, text="", font=("Helvetica", "1"), bg="papaya whip")
-        LISTE_BOUTTONS2[i].grid(row=2, column=x)
-        x += 1
+    for loop in range(CODE):
+            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
+            x1, x2 = x2, x2+INTERVALLE_X
 
     # Différents modes #
     if MODE == "Tres facile":
-        CERCLE2 = [[0]*6 for x in range(NB_ESSAIS)]
+        CERCLE2 = [0]*6
         LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
         LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
         LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
         LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
         LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
         LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
+        
 
     elif MODE == "Facile":
-        CERCLE2 = [[0]*6 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS2[0].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS2[1].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS2[2].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS2[3].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS2[4].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS2[5].configure(fenetre2, text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
+        CERCLE2 =[0]*6
+        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
+        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
+        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
+        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
+        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
+        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
         
+
     elif MODE == "Classique":
-        CERCLE2 = [[0]*8 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
+        CERCLE2 = [0]*8
+        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
+        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
+        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
+        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
+        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
+        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
+        LISTE_BOUTTONS2[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
+        LISTE_BOUTTONS2[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
+        
 
     else:
-        CERCLE2 = [[0]*10 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
-        LISTE_BOUTTONS[8].configure(text="●", font=("Helvetica", "8"), bg=couleurs[8], command=lambda : Cercle(couleurs[8]))
-        LISTE_BOUTTONS[9].configure(text="●", font=("Helvetica", "8"), bg=couleurs[9], command=lambda : Cercle(couleurs[9]))
-
+        CERCLE2 = [0]*10
+        LISTE_BOUTTONS2[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Cercle(couleurs[0]))
+        LISTE_BOUTTONS2[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Cercle(couleurs[1]))
+        LISTE_BOUTTONS2[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Cercle(couleurs[2]))
+        LISTE_BOUTTONS2[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Cercle(couleurs[3]))
+        LISTE_BOUTTONS2[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Cercle(couleurs[4]))
+        LISTE_BOUTTONS2[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Cercle(couleurs[5]))
+        LISTE_BOUTTONS2[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Cercle(couleurs[6]))
+        LISTE_BOUTTONS2[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Cercle(couleurs[7]))
+        LISTE_BOUTTONS2[8].configure(text="●", font=("Helvetica", "8"), bg=couleurs[8], command=lambda : Cercle(couleurs[8]))
+        LISTE_BOUTTONS2[9].configure(text="●", font=("Helvetica", "8"), bg=couleurs[9], command=lambda : Cercle(couleurs[9]))
+        
     
-    fenetre2.mainloop()
-    
-
 '''
+
 
 # Création des pions bien plaçés et mal plaçés #
 
@@ -332,6 +326,99 @@ def Jeu(couleur):
                 malPlace(mal_place)
         
         
+
+
+
+
+# Création fonction deux joueurs #
+
+def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
+    global LISTE_JEU
+    global LISTE_JEU_COMPLET
+    global MODE
+    global LISTE_CODE
+    global CERCLE
+    global CODE
+    global LISTE_COULEURS
+
+    mode_un_joueur.destroy()
+    mode_deux_joueurs.destroy()
+   
+    
+    # Création du jeu (code secret) #
+    menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
+    
+    for a in range(CODE):
+        print(couleurs)
+        couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
+        while not (couleur_secret in couleurs):
+            print(couleurs)
+            couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
+        LISTE_CODE.append(couleur_secret)
+
+
+    #canvas.delete("all")
+    #code.destroy()
+
+    #for a in range(10):
+    #    LISTE_BOUTTONS2[a].destroy()
+    
+    retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
+    
+
+
+    # Création de la grille #
+    x1, y1 = 10, 50
+    x2 = x1+intervalle_x
+    y2 = y1+intervalle_y
+    for i in range(essais):
+        for j in range(CODE):
+            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
+            x1, x2 = x2, x2+intervalle_x
+        y1, y2 = y2, y2+intervalle_y
+        x1 = 10
+        x2 = x1+intervalle_x
+
+    
+    # Différents modes #
+    if MODE == "Tres facile":
+        CERCLE = [[0]*4 for x in range(NB_ESSAIS)]
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        
+    elif MODE == "Facile":
+        CERCLE = [[0]*5 for x in range(NB_ESSAIS)]
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
+        
+    elif MODE == "Classique":
+        CERCLE = [[0]*6 for x in range(NB_ESSAIS)]
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
+        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
+ 
+
+    else:
+        CERCLE = [[0]*8 for x in range(NB_ESSAIS)]
+        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
+        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
+        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
+        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
+        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
+        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
+        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
+        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
+
+
+
 
 # Création fonction un joueur #
 
@@ -416,81 +503,6 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
 
     
 
-# Création fonction deux joueurs #
-
-def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
-    global MODE
-    global LISTE_CODE
-    global CERCLE
-    global CODE
-    global LISTE_COULEURS
-
-    mode_un_joueur.destroy()
-    mode_deux_joueurs.destroy()
-   
-    
-    # Création du jeu #
-    retour.configure(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour)
-    menu.configure(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
-
-
-    # Création de la grille #
-    x1, y1 = 10, 50
-    x2 = x1+intervalle_x
-    y2 = y1+intervalle_y
-    for i in range(essais):
-        for j in range(CODE):
-            canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
-            x1, x2 = x2, x2+intervalle_x
-        y1, y2 = y2, y2+intervalle_y
-        x1 = 10
-        x2 = x1+intervalle_x
-
-    
-    # Différents modes #
-    if MODE == "Tres facile":
-        CERCLE = [[0]*6 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        
-    elif MODE == "Facile":
-        CERCLE = [[0]*6 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        
-    elif MODE == "Classique":
-        CERCLE = [[0]*8 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
-
-    else:
-        CERCLE = [[0]*10 for x in range(NB_ESSAIS)]
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
-        LISTE_BOUTTONS[8].configure(text="●", font=("Helvetica", "8"), bg=couleurs[8], command=lambda : Jeu(couleurs[8]))
-        LISTE_BOUTTONS[9].configure(text="●", font=("Helvetica", "8"), bg=couleurs[9], command=lambda : Jeu(couleurs[9]))
 
 
 
@@ -506,7 +518,7 @@ def tresFacile():
     global CODE
     CODE = 3
     MODE = "Tres facile"
-    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange']
+    LISTE_COULEURS = ['black', 'green', 'blue', 'purple']
     NB_ESSAIS = 12
     INTERVALLE_Y = 40 #540
     INTERVALLE_X = 93 #289
@@ -532,7 +544,7 @@ def Facile():
     global CODE
     CODE = 4
     MODE = "Facile"
-    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange']
+    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow']
     NB_ESSAIS = 12
     INTERVALLE_Y = 40 #540
     INTERVALLE_X = 70 #290
@@ -556,7 +568,7 @@ def Classique():
     global CODE
     CODE = 4
     MODE = "Classique"
-    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan']
+    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange']
     NB_ESSAIS = 10
     INTERVALLE_Y = 48 #530
     INTERVALLE_X = 70 #290
@@ -581,7 +593,7 @@ def IMPOSSIBLE():
     global CODE
     CODE = 5
     MODE = "IMPOSSIBLE"
-    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan', 'gray', 'magenta']
+    LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan']
     NB_ESSAIS = 8
     INTERVALLE_Y = 60 #530
     INTERVALLE_X = 55 #290
