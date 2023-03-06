@@ -725,8 +725,6 @@ def Accueil():
         NV_IMPOSSIBLE = tk.Button(fenetre)
         NV_IMPOSSIBLE.grid(row=7, column=5)
 
-
-
         for i in range(8):
             LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
             LISTE_BOUTTONS[i].place(x=1000, y=0)
@@ -750,5 +748,4 @@ def Accueil():
 
 
 Accueil()
-
 fenetre.mainloop()
