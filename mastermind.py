@@ -117,7 +117,7 @@ def Victoire():
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    gagne.config(text="Vous avez gagné(e) !", font=("Helvetica", "14"), bg="papaya whip").place(x=360, y=300)
+    gagne.config(text="Vous avez gagné !", font=("Helvetica", "14"), bg="papaya whip").place(x=360, y=300)
     
 
 
@@ -133,7 +133,7 @@ def Defaite():
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    perdu.config(text="Vous avez perdu(e) !", font=("Helvetica", "14"), bg="papaya whip").place(x=360, y=300)
+    perdu.config(text="Vous avez perdu !", font=("Helvetica", "14"), bg="papaya whip").place(x=360, y=300)
    
 
 
