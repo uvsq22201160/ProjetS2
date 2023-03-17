@@ -15,6 +15,8 @@ from json import *
 
 Dict_liste_jeu = {"Tres facile":[[],[]], "Facile":[[],[]], "Classique":[[],[]], "IMPOSSIBLE":[[],[]], "Mode":"", "Joueurs":""}
 
+Dict_couleurs = {'black':0, 'green':0, 'blue':0, 'purple':0, 'yellow':0, 'orange':0, 'pink':0, 'cyan':0}
+
 MODE = ""
 JOUEURS = 0
 NB_ESSAIS = 0
@@ -155,6 +157,7 @@ def Sauvegarde():
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global JOUEURS
+    global LISTE_CODE
     sauvegarder.destroy()
     sauvegarder_oui.destroy()
     sauvegarder_non.destroy()
@@ -165,9 +168,10 @@ def Sauvegarde():
     fichier = open("./sauvegarde.py", "w")
     dump(Dict_liste_jeu, fichier)
     fichier.close()
+    LISTE_JEU = [[]]
+    LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
     Accueil()
-
-
 
 # Pas de sauvegarde #
 
@@ -175,11 +179,13 @@ def PasdeSauvegarde():
     global Dict_liste_jeu
     global LISTE_JEU
     global LISTE_JEU_COMPLET
+    global LISTE_CODE
     sauvegarder.destroy()
     sauvegarder_oui.destroy()
     sauvegarder_non.destroy()
     LISTE_JEU = [[]]
     LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
     Dict_liste_jeu[MODE][0] = LISTE_JEU
     Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
     Accueil()
@@ -290,6 +296,8 @@ def Jeu(couleur):
     global INTERVALLE_X
     global INTERVALLE_Y
     global LISTE_CODE
+    global Dict_couleurs
+
     LISTE_JEU_COMPLET.append(couleur)
     colonne = len(LISTE_JEU_COMPLET) % CODE
     ligne = int(len(LISTE_JEU_COMPLET) // CODE)
@@ -329,12 +337,19 @@ def Jeu(couleur):
             else:
                 bien_place = 0
                 mal_place = 0
+                for i in range(CODE):
+                    Dict_couleurs[LISTE_CODE[i]] = LISTE_CODE.count(LISTE_CODE[i])
                 for j in range(CODE):
-                    if (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
+                    Dict_couleurs[LISTE_JEU[ligne-1][j]] -= 1
+                    if Dict_couleurs[LISTE_JEU[ligne-1][j]] >= 0:
+                        if (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
+                            bien_place += 1
+                        elif (LISTE_JEU[ligne-1][j] in LISTE_CODE) and (LISTE_JEU[ligne-1][j] != LISTE_CODE[j]):
+                            mal_place += 1
+                    elif Dict_couleurs[LISTE_JEU[ligne-1][j]] < 0 and (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
                         bien_place += 1
-                    elif (LISTE_JEU[ligne-1][j] in LISTE_CODE) and (LISTE_JEU[ligne-1][j] != LISTE_CODE[j]):
-                        mal_place += 1
-        
+                        mal_place -= 1
+
                 bienPlace(bien_place, ligne)
                 malPlace(mal_place, ligne)
                 
@@ -468,6 +483,7 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     global PIONS_MP
     global NB_COULEURS
     global JOUEURS
+    global Dict_couleurs
 
     JOUEURS = 1
 
@@ -487,6 +503,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         a = rd.randint(0, len(couleurs)-1)
         LISTE_CODE.append(couleurs[a])
 
+    for j in range(CODE):
+        Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
 
     # Création de la grille #
     x1, y1 = 10, 50
@@ -510,6 +528,11 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
             x += 1
+        z = 0
+        #for j in range(NB_COULEURS):
+            #z = couleurs[j]
+            #LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=lambda : Jeu(z))
+            #z = 0
         LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
         LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
         LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
@@ -518,9 +541,10 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     elif MODE == "Facile":
         CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
-        for i in range(5):
+        for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
             x += 1
+        
         LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
         LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
         LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
@@ -579,6 +603,7 @@ def tresFacile():
     INTERVALLE_Y = 40 #540
     INTERVALLE_X = 93.3 #289
 
+    CHARGER_PARTIE.destroy()
     NV_TRES_FACILE.destroy()
     NV_FACILE.destroy()
     NV_CLASSIQUE.destroy()
@@ -614,6 +639,7 @@ def Facile():
     INTERVALLE_Y = 40 #540
     INTERVALLE_X = 70 #290
 
+    CHARGER_PARTIE.destroy()
     NV_TRES_FACILE.destroy()
     NV_FACILE.destroy()
     NV_CLASSIQUE.destroy()
@@ -647,6 +673,7 @@ def Classique():
     INTERVALLE_Y = 48 #530
     INTERVALLE_X = 70 #290
 
+    CHARGER_PARTIE.destroy()
     NV_TRES_FACILE.destroy()
     NV_FACILE.destroy()
     NV_CLASSIQUE.destroy()
@@ -681,7 +708,7 @@ def IMPOSSIBLE():
     INTERVALLE_Y = 60 #530
     INTERVALLE_X = 55 #290
     
-
+    CHARGER_PARTIE.destroy()
     NV_TRES_FACILE.destroy()
     NV_FACILE.destroy()
     NV_CLASSIQUE.destroy()
@@ -744,7 +771,6 @@ def Accueil():
     global NV_CLASSIQUE
     global NV_IMPOSSIBLE
     global CHARGER_PARTIE
-    global Dict_liste_jeu
     global mode_un_joueur
     global mode_deux_joueurs
     global retour
@@ -809,14 +835,6 @@ def Accueil():
         for l in range(12):
             for m in range(4):
                 PIONS_MP[l][m] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-
-        # Récupération de la sauvegarde #
-        fichier = open("./sauvegarde.py")
-        data = fichier.read()
-        fichier.close()
-        Dict_liste_jeu = loads(data)
-        print(Dict_liste_jeu)
-        
      
     CHARGER_PARTIE.config(text="Charger partie précédente", command=Charger, font=("Helvetica", "8"), bg="brown")
     NV_TRES_FACILE.config(text="Très facile", command=tresFacile, font=("Helvetica", "10"), bg="brown")
