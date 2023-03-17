@@ -37,6 +37,8 @@ PIONS_MP = [[0]*4 for x in range(12)]
 
 FIN_PARTIE = False
 
+RECUPERATION = False
+
 test = 0 # nombre de fois que le joueur retourne au menu, permet de générer à nouveau la page d'accueil et de réinitialiser par conséquent les boutons
 
 
@@ -325,7 +327,7 @@ def Jeu(couleur):
             colonne = CODE - 1
             LISTE_JEU[ligne-1].append(couleur)
             # test #
-            print(LISTE_JEU[ligne-1], LISTE_CODE, LISTE_JEU)
+            print(LISTE_CODE, LISTE_JEU)
             # test #
             x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne)
             x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne)
@@ -356,6 +358,39 @@ def Jeu(couleur):
         
         
 
+def Recuperation(condition):
+    global NB_ESSAIS
+    global LISTE_JEU_COMPLET
+    global LISTE_JEU
+    global CERCLE
+    global CODE
+    global INTERVALLE_X
+    global INTERVALLE_Y
+    global LISTE_CODE
+
+    if condition:
+        for i in range(len(LISTE_JEU_COMPLET)):
+            colonne = (i+1) % CODE
+            ligne = int((i+1) // CODE)
+            if colonne == 0:
+                x1 = 10 + (INTERVALLE_X/2 - 10)
+                x2 = 10 + (INTERVALLE_X/2 + 10)
+                y1 = 50 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)*(ligne)
+                y2 = 50 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)*(ligne)
+                CERCLE[ligne][0] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
+            elif colonne != 0:
+                x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne-1)
+                x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne-1)
+                y1 = 50 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)*(ligne)
+                y2 = 50 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)*(ligne)
+                CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])  
+            else :
+                colonne = CODE - 1
+                x1 = 10 + (INTERVALLE_X/2 - 10) + (INTERVALLE_X)*(colonne)
+                x2 = 10 + (INTERVALLE_X/2 + 10) + (INTERVALLE_X)*(colonne)
+                y1 = 50 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)*(ligne-1)
+                y2 = 50 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)*(ligne-1)
+                CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
 
 
 # Création fonction deux joueurs #
@@ -373,6 +408,7 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
     global PIONS_MP
     global NB_COULEURS
     global JOUEURS
+    global Dict_couleurs
 
     JOUEURS = 2
 
@@ -411,7 +447,10 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
             couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
         LISTE_CODE.append(couleur_secret)
 
+    for j in range(CODE):
+        Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
     
+
     # Différents modes #
     if MODE == "Tres facile":
         CERCLE = [[0]*NB_COULEURS for x in range(essais)]
@@ -471,7 +510,7 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
 
 # Création fonction un joueur #
 
-def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
+def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     '''Permet de démarrer le jeu à 1 joueur'''
     global LISTE_JEU
     global LISTE_JEU_COMPLET
@@ -497,7 +536,10 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     menu.place_configure(x=40, y=5)
     PIONS_BP = [[0]*4 for x in range(essais)]
     PIONS_MP = [[0]*4 for x in range(essais)]
-
+    CERCLE = [[0]*CODE for x in range(essais)]
+    
+    Recuperation(recuperation)
+        
     a = 0
     for i in range(CODE):
         a = rd.randint(0, len(couleurs)-1)
@@ -510,25 +552,24 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
     x1, y1 = 10, 50
     x2 = x1+intervalle_x
     y2 = y1+intervalle_y
-    for i in range(essais):
-        for j in range(CODE):
+    for k in range(essais):
+        for l in range(CODE):
             canvas.create_rectangle(x1,y1, x2,y2, fill="saddle brown")
             x1, x2 = x2, x2+intervalle_x
         y1, y2 = y2, y2+intervalle_y
         x1 = 10
         x2 = x1+intervalle_x
 
-    for i in range(essais):
-        canvas.create_rectangle(290, 50+(intervalle_y*(i)), 360, 50+(intervalle_y*(i+1)))
+    for m in range(essais):
+        canvas.create_rectangle(290, 50+(intervalle_y*(m)), 360, 50+(intervalle_y*(m+1)))
     
     # Différents modes #
     if MODE == "Tres facile":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
             x += 1
-        z = 0
+        #z = 0
         #for j in range(NB_COULEURS):
             #z = couleurs[j]
             #LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=lambda : Jeu(z))
@@ -539,7 +580,6 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
         
     elif MODE == "Facile":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -553,7 +593,6 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
 
         
     elif MODE == "Classique":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -566,7 +605,6 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
 
     else:
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -594,7 +632,9 @@ def tresFacile():
     global MODE
     global CODE
     global NB_COULEURS
+    global RECUPERATION
     global Dict_liste_jeu
+
     CODE = 3
     MODE = "Tres facile"
     LISTE_COULEURS = ['black', 'green', 'blue', 'purple']
@@ -610,13 +650,13 @@ def tresFacile():
     NV_IMPOSSIBLE.destroy()
 
     if Dict_liste_jeu["Joueurs"] == 1:
-        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
-        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
 
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -630,7 +670,9 @@ def Facile():
     global MODE
     global CODE
     global NB_COULEURS
+    global RECUPERATION
     global Dict_liste_jeu
+
     CODE = 4
     MODE = "Facile"
     LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow']
@@ -646,13 +688,13 @@ def Facile():
     NV_IMPOSSIBLE.destroy()
 
     if Dict_liste_jeu["Joueurs"] == 1:
-        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
-        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
 
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_deux_joueurs.grid(row=6, column=5)
 
 def Classique():
@@ -664,7 +706,9 @@ def Classique():
     global MODE
     global CODE
     global NB_COULEURS
+    global RECUPERATION
     global Dict_liste_jeu
+
     CODE = 4
     MODE = "Classique"
     LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange']
@@ -680,13 +724,13 @@ def Classique():
     NV_IMPOSSIBLE.destroy()
 
     if Dict_liste_jeu["Joueurs"] == 1:
-        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
-        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
 
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -700,6 +744,8 @@ def IMPOSSIBLE():
     global CODE
     global NB_COULEURS
     global Dict_liste_jeu
+    global RECUPERATION
+
     CODE = 5
     MODE = "IMPOSSIBLE"
     LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan']
@@ -715,14 +761,14 @@ def IMPOSSIBLE():
     NV_IMPOSSIBLE.destroy()
 
     if Dict_liste_jeu["Joueurs"] == 1:
-        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
-        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X)
+        deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
 
 
-    mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.configure(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X), font=("Helvetica", "16"), bg="brown")
+    mode_deux_joueurs.configure(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
     mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -733,6 +779,9 @@ def Charger():
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global Dict_liste_jeu
+    global RECUPERATION
+
+    RECUPERATION = True
 
     CHARGER_PARTIE.destroy()
 
