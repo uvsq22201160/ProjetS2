@@ -54,7 +54,7 @@ canvas.grid(row=0, column=0, rowspan=9, columnspan=11)
 
 
 
-# Création des bouttons initiales #
+# Création des bouttons initiaux #
 
 mode_un_joueur = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 mode_un_joueur.place(x=1000, y=0)
