@@ -2,18 +2,18 @@ import tkinter as tk
 import random as rd
 from json import *
 
-####################################################################################################################
-#                                                                                                                  #
-#   Mastermind   :    Gaël FERREIRA RODRIGUEZ / Elise MOULIN / César PITIGLIANO / Noel-Marie N'dri                 #
-#                                                                                                                  #
-####################################################################################################################
+     #################################################################################################
+    #                                                                                                 #
+   #   Mastermind   :    Gaël FERREIRA RODRIGUEZ / Elise MOULIN / César PITIGLIANO / Noel-Marie N'dri  #
+    #                                                                                                 #
+     #################################################################################################
 
 
 
 
 # Conditions initiales #
 
-Dict_liste_jeu = {"Tres facile":[[],[]], "Facile":[[],[]], "Classique":[[],[]], "IMPOSSIBLE":[[],[]], "Mode":"", "Joueurs":""}
+Dict_liste_jeu = {"Tres facile":[[],[],[]], "Facile":[[],[],[]], "Classique":[[],[],[]], "IMPOSSIBLE":[[],[],[]], "Mode":"", "Joueurs":""}
 
 Dict_couleurs = {'black':0, 'green':0, 'blue':0, 'purple':0, 'yellow':0, 'orange':0, 'pink':0, 'cyan':0}
 
@@ -37,7 +37,7 @@ PIONS_MP = [[0]*4 for x in range(12)]
 
 FIN_PARTIE = False
 
-RECUPERATION = False
+RECUPERATION = 0
 
 test = 0 # nombre de fois que le joueur retourne au menu, permet de générer à nouveau la page d'accueil et de réinitialiser par conséquent les boutons
 
@@ -165,6 +165,7 @@ def Sauvegarde():
     sauvegarder_non.destroy()
     Dict_liste_jeu[MODE][0] = LISTE_JEU
     Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
+    Dict_liste_jeu[MODE][2] = LISTE_CODE
     Dict_liste_jeu["Mode"] = MODE
     Dict_liste_jeu["Joueurs"] = JOUEURS
     fichier = open("./sauvegarde.py", "w")
@@ -190,6 +191,7 @@ def PasdeSauvegarde():
     LISTE_CODE = []
     Dict_liste_jeu[MODE][0] = LISTE_JEU
     Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
+    Dict_liste_jeu[MODE][2] = LISTE_CODE
     Accueil()
 
 
@@ -367,12 +369,16 @@ def Recuperation(condition):
     global INTERVALLE_X
     global INTERVALLE_Y
     global LISTE_CODE
+    global MODE
+    global Dict_couleurs
+    global Dict_liste_jeu
 
-    if condition:
+    if condition == 1:
+        LISTE_CODE = Dict_liste_jeu[MODE][2]
         for i in range(len(LISTE_JEU_COMPLET)):
             colonne = (i+1) % CODE
             ligne = int((i+1) // CODE)
-            if colonne == 0:
+            if colonne == 1:
                 x1 = 10 + (INTERVALLE_X/2 - 10)
                 x2 = 10 + (INTERVALLE_X/2 + 10)
                 y1 = 50 + (INTERVALLE_Y/2 - 10) + (INTERVALLE_Y)*(ligne)
@@ -392,10 +398,32 @@ def Recuperation(condition):
                 y2 = 50 + (INTERVALLE_Y/2 + 10) + (INTERVALLE_Y)*(ligne-1)
                 CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
 
+                if LISTE_JEU[ligne-1] == LISTE_CODE:
+                    Victoire()
+                else:
+                    bien_place = 0
+                    mal_place = 0
+                    for j in range(CODE):
+                        Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
+                    for k in range(CODE):
+                        Dict_couleurs[LISTE_JEU[ligne-1][k]] -= 1
+                        if Dict_couleurs[LISTE_JEU[ligne-1][k]] >= 0:
+                            if (LISTE_JEU[ligne-1][k] == LISTE_CODE[k]):
+                                bien_place += 1
+                            elif (LISTE_JEU[ligne-1][k] in LISTE_CODE) and (LISTE_JEU[ligne-1][k] != LISTE_CODE[k]):
+                                mal_place += 1
+                        elif Dict_couleurs[LISTE_JEU[ligne-1][k]] < 0 and (LISTE_JEU[ligne-1][k] == LISTE_CODE[k]):
+                            bien_place += 1
+                            mal_place -= 1
+
+                    bienPlace(bien_place, ligne)
+                    malPlace(mal_place, ligne)
+
+
 
 # Création fonction deux joueurs #
 
-def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
+def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     '''Permet de démarrer le jeu à 2 joueurs'''
     global LISTE_JEU
     global LISTE_JEU_COMPLET
@@ -422,6 +450,8 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
 
     PIONS_BP = [[0]*4 for x in range(essais)]
     PIONS_MP = [[0]*4 for x in range(essais)]
+    CERCLE = [[0]*CODE for x in range(essais)]
+
 
     # Création de la grille #
     x1, y1 = 10, 50
@@ -450,10 +480,10 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
     for j in range(CODE):
         Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
     
+    Recuperation(recuperation)
 
     # Différents modes #
     if MODE == "Tres facile":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -464,7 +494,6 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
         
     elif MODE == "Facile":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(5):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -478,7 +507,6 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
 
         
     elif MODE == "Classique":
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -491,7 +519,6 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x):
         LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
 
     else:
-        CERCLE = [[0]*NB_COULEURS for x in range(essais)]
         x=0
         for i in range(NB_COULEURS):
             LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
@@ -538,7 +565,7 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     PIONS_MP = [[0]*4 for x in range(essais)]
     CERCLE = [[0]*CODE for x in range(essais)]
     
-    Recuperation(recuperation)
+  
         
     a = 0
     for i in range(CODE):
@@ -563,6 +590,8 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     for m in range(essais):
         canvas.create_rectangle(290, 50+(intervalle_y*(m)), 360, 50+(intervalle_y*(m+1)))
     
+    Recuperation(recuperation)
+
     # Différents modes #
     if MODE == "Tres facile":
         x=0
@@ -653,11 +682,11 @@ def tresFacile():
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_deux_joueurs.grid(row=6, column=5)
+    else:
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_un_joueur.grid(row=2, column=5)
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.grid(row=6, column=5)
 
 
 
@@ -691,11 +720,11 @@ def Facile():
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_deux_joueurs.grid(row=6, column=5)
+    else:
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_un_joueur.grid(row=2, column=5)
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.grid(row=6, column=5)
 
 def Classique():
     '''Permet de démarrer le jeu en mode classique'''
@@ -727,11 +756,11 @@ def Classique():
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-
-    mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_deux_joueurs.grid(row=6, column=5)
+    else:
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_un_joueur.grid(row=2, column=5)
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.grid(row=6, column=5)
 
 
 def IMPOSSIBLE():
@@ -764,12 +793,11 @@ def IMPOSSIBLE():
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     elif Dict_liste_jeu["Joueurs"] == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-
-
-    mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_un_joueur.grid(row=2, column=5)
-    mode_deux_joueurs.configure(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
-    mode_deux_joueurs.grid(row=6, column=5)
+    else:
+        mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_un_joueur.grid(row=2, column=5)
+        mode_deux_joueurs.configure(text="2 JOUEURS", command=lambda : deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.grid(row=6, column=5)
 
 
 
@@ -781,9 +809,7 @@ def Charger():
     global Dict_liste_jeu
     global RECUPERATION
 
-    RECUPERATION = True
-
-    CHARGER_PARTIE.destroy()
+    RECUPERATION = 1
 
     # Récupération des données #
     fichier = open("./sauvegarde.py")
