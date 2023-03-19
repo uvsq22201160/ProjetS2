@@ -647,8 +647,13 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
         LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
         LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
 
-
-
+#def fonction aide#
+"""def aide(couleur_secret,CODE):
+       PIONS_MP=[]
+       for i in range (len(CODE)):
+         if CODE[i] in couleur_secret and CODE[i]!=couleur_secret[i]:
+           PIONSMP.append(CODE[i])
+        return PIONSMP"""
 
 # Création des modes #
 
