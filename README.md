@@ -7,6 +7,6 @@ URL : https://github.com/uvsq22201160/ProjetS2/
 Gaël FERREIRA RODRIGUEZ, Elise MOULIN, César PTIGLIANO, Noel-Marie N'dri
 
 # Utilisation du programme
-Afin de pouvoir bénéficier du jeu Mastermind, veuillez télécharger les documents : [mastermind.py](https://github.com/uvsq22201160/ProjetS2/files/10745164/mastermind.py) et [sauvegarde.py](https://github.com/uvsq22201160/ProjetS2/files/10745164/sauvegarde.py). Veuillez au préalable vérifier que le document sauvegarde.py est vide. Une fois le code présent dans votre interface, exécutez-le... et profitez !
+Afin de pouvoir bénéficier du jeu Mastermind, veuillez télécharger les documents : [mastermind.py](https://github.com/uvsq22201160/ProjetS2/mastermind.py) et [sauvegarde.py](https://github.com/uvsq22201160/ProjetS2/sauvegarde.py). Veuillez au préalable vérifier que le document sauvegarde.py est vide. Une fois le code présent dans votre interface, exécutez-le... et profitez !
 
 
