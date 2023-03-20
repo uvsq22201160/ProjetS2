@@ -126,12 +126,27 @@ def Victoire():
     global LISTE_BOUTTONS
     global LISTE_COULEURS
     global FIN_PARTIE
+    global Dict_liste_jeu
+    global LISTE_CODE
+    global LISTE_JEU
+    global LISTE_JEU_COMPLET
+    
     FIN_PARTIE = True
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     gagne.config(text="Vous avez gagné !", font=("Helvetica", "14"), bg="papaya whip")
-    gagne.place(x=360, y=300)
+    Dict_liste_jeu[MODE][0] = LISTE_JEU
+    Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
+    Dict_liste_jeu[MODE][2] = LISTE_CODE
+    Dict_liste_jeu["Mode"] = MODE
+    Dict_liste_jeu["Joueurs"] = JOUEURS
+    fichier = open("./sauvegarde.py", "w")
+    dump(Dict_liste_jeu, fichier)
+    fichier.close()
+    LISTE_JEU = [[]]
+    LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
     
 
 
@@ -143,12 +158,27 @@ def Defaite():
     global LISTE_BOUTTONS
     global LISTE_COULEURS
     global FIN_PARTIE
+    global Dict_liste_jeu
+    global LISTE_CODE
+    global LISTE_JEU
+    global LISTE_JEU_COMPLET
+    
     FIN_PARTIE = True
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     perdu.config(text="Vous avez perdu !", font=("Helvetica", "14"), bg="papaya whip")
-    perdu.place(x=360, y=300)
+    Dict_liste_jeu[MODE][0] = LISTE_JEU
+    Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
+    Dict_liste_jeu[MODE][2] = LISTE_CODE
+    Dict_liste_jeu["Mode"] = MODE
+    Dict_liste_jeu["Joueurs"] = JOUEURS
+    fichier = open("./sauvegarde.py", "w")
+    dump(Dict_liste_jeu, fichier)
+    fichier.close()
+    LISTE_JEU = [[]]
+    LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
    
 
 
@@ -648,12 +678,12 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
         LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
 
 #def fonction aide#
-"""def aide(couleur_secret,CODE):
+'''def aide(couleur_secret,CODE):
        PIONS_MP=[]
        for i in range (len(CODE)):
          if CODE[i] in couleur_secret and CODE[i]!=couleur_secret[i]:
            PIONSMP.append(CODE[i])
-        return PIONSMP"""
+        return PIONSMP'''
 
 # Création des modes #
 
