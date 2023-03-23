@@ -1,1 +1,1 @@
-{"Tres facile": [[["purple", "purple", "purple"], ["purple", "green", "green"], []], ["purple", "purple", "purple", "purple", "green", "green"], ["purple", "green", "green"]], "Facile": [[], [], []], "Classique": [[], [], []], "IMPOSSIBLE": [[], [], []], "Mode": "Tres facile", "Joueurs": 1}
+{"Tres facile": [[], [], []], "Facile": [[["yellow", "blue", "blue", "blue"], [], [], [], [], []], ["yellow", "blue", "blue", "blue"], ["blue", "black", "purple", "green"]], "Classique": [[], [], []], "IMPOSSIBLE": [[], [], []], "Mode": "Facile", "Joueurs": 1}

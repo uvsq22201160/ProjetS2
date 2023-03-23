@@ -102,9 +102,6 @@ NV_IMPOSSIBLE = tk.Button(fenetre)
 NV_IMPOSSIBLE.grid(row=7, column=5)
 
 
-
-
-
 for i in range(8):
     LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
     LISTE_BOUTTONS[i].place(x=1000, y=0)
@@ -130,7 +127,8 @@ def Victoire():
     global LISTE_CODE
     global LISTE_JEU
     global LISTE_JEU_COMPLET
-    
+    global JOUEURS
+
     FIN_PARTIE = True
     for i in range(8):
         LISTE_BOUTTONS[i].destroy()
@@ -147,7 +145,7 @@ def Victoire():
     LISTE_JEU = [[]]
     LISTE_JEU_COMPLET = []
     LISTE_CODE = []
-    
+    JOUEURS = 0
 
 
 # Canvas défaite #
@@ -162,6 +160,7 @@ def Defaite():
     global LISTE_CODE
     global LISTE_JEU
     global LISTE_JEU_COMPLET
+    global JOUEURS
     
     FIN_PARTIE = True
     for i in range(8):
@@ -179,7 +178,7 @@ def Defaite():
     LISTE_JEU = [[]]
     LISTE_JEU_COMPLET = []
     LISTE_CODE = []
-   
+    JOUEURS = 0
 
 
 # Sauvegarder #
@@ -204,6 +203,7 @@ def Sauvegarde():
     LISTE_JEU = [[]]
     LISTE_JEU_COMPLET = []
     LISTE_CODE = []
+    JOUEURS = 0
     Accueil()
 
 # Pas de sauvegarde #
@@ -213,12 +213,14 @@ def PasdeSauvegarde():
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global LISTE_CODE
+    global JOUEURS
     sauvegarder.destroy()
     sauvegarder_oui.destroy()
     sauvegarder_non.destroy()
     LISTE_JEU = [[]]
     LISTE_JEU_COMPLET = []
     LISTE_CODE = []
+    JOUEURS = 0
     Dict_liste_jeu[MODE][0] = LISTE_JEU
     Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
     Dict_liste_jeu[MODE][2] = LISTE_CODE
@@ -512,57 +514,14 @@ def deuxJoueurs(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     
     Recuperation(recuperation)
 
-    # Différents modes #
-    if MODE == "Tres facile":
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        
-    elif MODE == "Facile":
-        x=0
-        for i in range(5):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-
-        
-    elif MODE == "Classique":
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-
-    else:
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
-
-
+    x = 0
+    for i in range(NB_COULEURS):
+        LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
+        x += 1
+    for j in range(NB_COULEURS):
+        def fonction_lambda(z = couleurs[j]):
+            Jeu(z)
+        LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=fonction_lambda)
 
 
 # Création fonction un joueur #
@@ -580,6 +539,7 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     global NB_COULEURS
     global JOUEURS
     global Dict_couleurs
+    global LISTE_BOUTTONS
 
     JOUEURS = 1
 
@@ -622,60 +582,18 @@ def unJoueur(couleurs, essais, intervalle_y, intervalle_x, recuperation):
     
     Recuperation(recuperation)
 
-    # Différents modes #
-    if MODE == "Tres facile":
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        #z = 0
-        #for j in range(NB_COULEURS):
-            #z = couleurs[j]
-            #LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=lambda : Jeu(z))
-            #z = 0
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        
-    elif MODE == "Facile":
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
+    # Création des boûtons
 
+    x = 0
+    for i in range(NB_COULEURS):
+        LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
+        x += 1
+    for j in range(NB_COULEURS):
+        def fonction_lambda(z = couleurs[j]):
+            Jeu(z)
+        LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=fonction_lambda)
         
-    elif MODE == "Classique":
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-
-    else:
-        x=0
-        for i in range(NB_COULEURS):
-            LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-            x += 1
-        LISTE_BOUTTONS[0].configure(text="●", font=("Helvetica", "8"), bg=couleurs[0], command=lambda : Jeu(couleurs[0]))
-        LISTE_BOUTTONS[1].configure(text="●", font=("Helvetica", "8"), bg=couleurs[1], command=lambda : Jeu(couleurs[1]))
-        LISTE_BOUTTONS[2].configure(text="●", font=("Helvetica", "8"), bg=couleurs[2], command=lambda : Jeu(couleurs[2]))
-        LISTE_BOUTTONS[3].configure(text="●", font=("Helvetica", "8"), bg=couleurs[3], command=lambda : Jeu(couleurs[3]))
-        LISTE_BOUTTONS[4].configure(text="●", font=("Helvetica", "8"), bg=couleurs[4], command=lambda : Jeu(couleurs[4]))
-        LISTE_BOUTTONS[5].configure(text="●", font=("Helvetica", "8"), bg=couleurs[5], command=lambda : Jeu(couleurs[5]))
-        LISTE_BOUTTONS[6].configure(text="●", font=("Helvetica", "8"), bg=couleurs[6], command=lambda : Jeu(couleurs[6]))
-        LISTE_BOUTTONS[7].configure(text="●", font=("Helvetica", "8"), bg=couleurs[7], command=lambda : Jeu(couleurs[7]))
+    
 
 #def fonction aide#
 '''def aide(couleur_secret,CODE):
@@ -698,6 +616,7 @@ def tresFacile():
     global NB_COULEURS
     global RECUPERATION
     global Dict_liste_jeu
+    global JOUEURS
 
     CODE = 3
     MODE = "Tres facile"
@@ -713,9 +632,9 @@ def tresFacile():
     NV_CLASSIQUE.destroy()
     NV_IMPOSSIBLE.destroy()
 
-    if Dict_liste_jeu["Joueurs"] == 1:
+    if JOUEURS == 1:
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-    elif Dict_liste_jeu["Joueurs"] == 2:
+    elif JOUEURS == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     else:
         mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
@@ -736,6 +655,7 @@ def Facile():
     global NB_COULEURS
     global RECUPERATION
     global Dict_liste_jeu
+    global JOUEURS
 
     CODE = 4
     MODE = "Facile"
@@ -751,9 +671,9 @@ def Facile():
     NV_CLASSIQUE.destroy()
     NV_IMPOSSIBLE.destroy()
 
-    if Dict_liste_jeu["Joueurs"] == 1:
+    if JOUEURS == 1:
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-    elif Dict_liste_jeu["Joueurs"] == 2:
+    elif JOUEURS == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     else:
         mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
@@ -772,6 +692,7 @@ def Classique():
     global NB_COULEURS
     global RECUPERATION
     global Dict_liste_jeu
+    global JOUEURS
 
     CODE = 4
     MODE = "Classique"
@@ -787,9 +708,9 @@ def Classique():
     NV_CLASSIQUE.destroy()
     NV_IMPOSSIBLE.destroy()
 
-    if Dict_liste_jeu["Joueurs"] == 1:
+    if JOUEURS == 1:
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-    elif Dict_liste_jeu["Joueurs"] == 2:
+    elif JOUEURS == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     else:
         mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
@@ -809,6 +730,7 @@ def IMPOSSIBLE():
     global NB_COULEURS
     global Dict_liste_jeu
     global RECUPERATION
+    global JOUEURS
 
     CODE = 5
     MODE = "IMPOSSIBLE"
@@ -824,9 +746,9 @@ def IMPOSSIBLE():
     NV_CLASSIQUE.destroy()
     NV_IMPOSSIBLE.destroy()
 
-    if Dict_liste_jeu["Joueurs"] == 1:
+    if JOUEURS == 1:
         unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
-    elif Dict_liste_jeu["Joueurs"] == 2:
+    elif JOUEURS == 2:
         deuxJoueurs(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION)
     else:
         mode_un_joueur.configure(text="1 JOUEUR", command=lambda : unJoueur(LISTE_COULEURS, NB_ESSAIS, INTERVALLE_Y, INTERVALLE_X, RECUPERATION), font=("Helvetica", "16"), bg="brown")
@@ -843,6 +765,7 @@ def Charger():
     global LISTE_JEU_COMPLET
     global Dict_liste_jeu
     global RECUPERATION
+    global JOUEURS
 
     RECUPERATION = 1
 
@@ -852,6 +775,8 @@ def Charger():
     fichier.close()
     Dict_liste_jeu = loads(data)
     print(Dict_liste_jeu)
+
+    JOUEURS = Dict_liste_jeu["Joueurs"]
 
     if Dict_liste_jeu["Mode"] == "Tres facile":
         LISTE_JEU = Dict_liste_jeu["Tres facile"][0]
