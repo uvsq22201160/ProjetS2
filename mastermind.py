@@ -60,60 +60,43 @@ mode_un_joueur = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 mode_un_joueur.place(x=1000, y=0)
 mode_deux_joueurs = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 mode_deux_joueurs.place(x=1000, y=0)
-
 retour = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 retour.place(x=1000, y=0)
-
 menu = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 menu.place(x=1000, y=0)
-
 sauvegarder_oui = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 sauvegarder_oui.place(x=1000, y=0)
-
 sauvegarder_non = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
 sauvegarder_non.place(x=1000, y=0)
-
 sauvegarder = tk.Label(text="", font=("Helvetica", "1"), bg="papaya whip")
 sauvegarder.place(x=1000, y=0)
-
 code = tk.Label(text="", font=("Helvetica", "1"), bg="papaya whip")
 code.grid(row=0, column=5)
-
 gagne = tk.Label(text="", font=("Helvetica", "1"), bg="papaya whip")
 gagne.place(x=390, y=300)
-
 perdu = tk.Label(text="", font=("Helvetica", "1"), bg="papaya whip")
 perdu.place(x=390, y=300)
 
-
 CHARGER_PARTIE = tk.Button(fenetre)
 CHARGER_PARTIE.grid(row=0, column=5)
-
 NV_TRES_FACILE = tk.Button(fenetre)
 NV_TRES_FACILE.grid(row=1, column=5)
-
 NV_FACILE = tk.Button(fenetre)
 NV_FACILE.grid(row=3, column=5)
-
 NV_CLASSIQUE = tk.Button(fenetre)
 NV_CLASSIQUE.grid(row=5, column=5)
-
 NV_IMPOSSIBLE = tk.Button(fenetre)
 NV_IMPOSSIBLE.grid(row=7, column=5)
-
 
 for i in range(8):
     LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
     LISTE_BOUTTONS[i].place(x=1000, y=0)
-
 for j in range(12):
     for k in range(4):
         PIONS_BP[j][k] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-
 for l in range(12):
     for m in range(4):
         PIONS_MP[l][m] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-
 
 # Canvas victoire #
 
