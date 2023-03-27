@@ -13,7 +13,7 @@ from json import *
 
 # Conditions initiales #
 
-Dict_liste_jeu = {"Liste du jeu 2D":[[]], "Liste du jeu complet":[], "Liste code":[], "ligne":0, "colonne":0, "Joueurs":""}
+Dict_liste_jeu = {"Liste du jeu 2D":[[]], "Liste du jeu complet":[], "Liste code":[], "ligne":0, "colonne":0, "Nombre de couleurs":0 , "Joueurs":""}
 
 Dict_couleurs = {'black':0, 'green':0, 'blue':0, 'purple':0, 'yellow':0, 'orange':0, 'pink':0, 'cyan':0, 'grey':0, 'darkblue':0}
 
@@ -22,19 +22,11 @@ JOUEURS = 0
 LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan', 'grey', 'darkblue']
-LISTE_BOUTTONS = [0]*10
+LISTE_BOUTTONS = []
 LISTE_CODE = []
 CERCLE = [[]]
-CERCLE2 = []
-PIONS_BP = [[0]*4 for x in range(12)]
-PIONS_MP = [[0]*4 for x in range(12)]
-
-FIN_PARTIE = False
-
-RECUPERATION = 0
-
-test = 0 # nombre de fois que le joueur retourne au menu, permet de générer à nouveau la page d'accueil et de réinitialiser par conséquent les boutons
-
+PIONS_BP = [[]]
+PIONS_MP = [[]]
 
 # Création de la fenêtre #
 
@@ -76,155 +68,105 @@ CHARGER_PARTIE.grid(row=3, column=5)
 PARTIE_PERSONNALISE = tk.Button(fenetre)
 PARTIE_PERSONNALISE.grid(row=7, column=5)
 
-for i in range(8):
-    LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
-    LISTE_BOUTTONS[i].place(x=1000, y=0)
-for j in range(12):
-    for k in range(4):
-        PIONS_BP[j][k] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-for l in range(12):
-    for m in range(4):
-        PIONS_MP[l][m] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
 
 # Canvas victoire #
 
-def Victoire():
+def Victoire(ligne):
     '''Détruis les boutons et affiche que le joueur a gagné(e)'''
     global LISTE_BOUTTONS
-    global LISTE_COULEURS
-    global FIN_PARTIE
-    global Dict_liste_jeu
-    global LISTE_CODE
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
-    global JOUEURS
 
-    FIN_PARTIE = True
-    for i in range(8):
+    for i in range(ligne):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     gagne.config(text="Vous avez gagné !", font=("Helvetica", "14"), bg="papaya whip")
-    Dict_liste_jeu["ligne"]
-    fichier = open("./sauvegarde.py", "w")
-    dump(Dict_liste_jeu, fichier)
-    fichier.close()
-    LISTE_JEU = [[]]
-    LISTE_JEU_COMPLET = []
-    LISTE_CODE = []
-    JOUEURS = 0
 
 
 # Canvas défaite #
 
-def Defaite():
+def Defaite(ligne):
     '''Détruis les boutons et affiche que le joueur a perdu(e)'''
     global LISTE_BOUTTONS
-    global FIN_PARTIE
-    global Dict_liste_jeu
-    global LISTE_CODE
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
-    global JOUEURS
-    
-    FIN_PARTIE = True
-    for i in range(8):
+  
+    for i in range(ligne):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     perdu.config(text="Vous avez perdu !", font=("Helvetica", "14"), bg="papaya whip")
-    Dict_liste_jeu[MODE][0] = LISTE_JEU
-    Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
-    Dict_liste_jeu[MODE][2] = LISTE_CODE
-    Dict_liste_jeu["Mode"] = MODE
-    Dict_liste_jeu["Joueurs"] = JOUEURS
-    fichier = open("./sauvegarde.py", "w")
-    dump(Dict_liste_jeu, fichier)
-    fichier.close()
-    LISTE_JEU = [[]]
-    LISTE_JEU_COMPLET = []
-    LISTE_CODE = []
-    JOUEURS = 0
 
 
 # Sauvegarder #
 
-def Sauvegarde():
-    global MODE
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
-    global JOUEURS
-    global LISTE_CODE
-    sauvegarder.destroy()
-    sauvegarder_oui.destroy()
-    sauvegarder_non.destroy()
-    Dict_liste_jeu[MODE][0] = LISTE_JEU
-    Dict_liste_jeu[MODE][1] = LISTE_JEU_COMPLET
-    Dict_liste_jeu[MODE][2] = LISTE_CODE
-    Dict_liste_jeu["Mode"] = MODE
-    Dict_liste_jeu["Joueurs"] = JOUEURS
-    fichier = open("./sauvegarde.py", "w")
-    dump(Dict_liste_jeu, fichier)
-    fichier.close()
-    LISTE_JEU = [[]]
-    LISTE_JEU_COMPLET = []
-    LISTE_CODE = []
-    JOUEURS = 0
-    Accueil()
-
-# Pas de sauvegarde #
-
-def PasdeSauvegarde():
-    global Dict_liste_jeu
+def Sauvegarde(ligne, colonne, nb_couleurs):
     global LISTE_JEU
     global LISTE_JEU_COMPLET
     global LISTE_CODE
+    global LISTE_COULEURS
     global JOUEURS
+
     sauvegarder.destroy()
     sauvegarder_oui.destroy()
     sauvegarder_non.destroy()
-    LISTE_JEU = [[]]
-    LISTE_JEU_COMPLET = []
-    LISTE_CODE = []
-    JOUEURS = 0
+
     Dict_liste_jeu["Liste du jeu 2D"] = LISTE_JEU
     Dict_liste_jeu["Liste du jeu complet"] = LISTE_JEU_COMPLET
     Dict_liste_jeu["Liste code"] = LISTE_CODE
     Dict_liste_jeu["Joueurs"] = JOUEURS
-    Accueil()
+    Dict_liste_jeu["ligne"] = ligne
+    Dict_liste_jeu["colonne"] = colonne
+    Dict_liste_jeu["Nombre de couleurs"] = nb_couleurs
+
+    fichier = open("./sauvegarde.py", "w")
+    dump(Dict_liste_jeu, fichier)
+    fichier.close()
+
+    LISTE_JEU = [[]]
+    LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
+    JOUEURS = 0
+    Accueil(LISTE_COULEURS, repetition = 1)
+
+# Pas de sauvegarde #
+
+def PasdeSauvegarde():
+    global LISTE_JEU
+    global LISTE_JEU_COMPLET
+    global LISTE_CODE
+    global LISTE_COULEURS
+    global JOUEURS
+
+    sauvegarder.destroy()
+    sauvegarder_oui.destroy()
+    sauvegarder_non.destroy()
+
+    LISTE_JEU = [[]]
+    LISTE_JEU_COMPLET = []
+    LISTE_CODE = []
+    JOUEURS = 0
+    Accueil(LISTE_COULEURS, repetition = 1)
 
 
 # Boutton Menu #
 
-def Menu(ligne, colonne):
+def Menu(ligne, colonne, nb_couleurs):
     '''Sauvegarde la partie si elle est en cours et relance le programme'''
     global LISTE_BOUTTONS
-    global test
-    global FIN_PARTIE
      
-    test += 1
+    for i in range(nb_couleurs):
+        LISTE_BOUTTONS[i].destroy()
 
-    if FIN_PARTIE == True:
-        for i in range(8):
-            LISTE_BOUTTONS[i].destroy()
-        menu.destroy()
-        retour.destroy()
-        gagne.destroy()
-        perdu.destroy()
-        canvas.delete("all")
-        PasdeSauvegarde()
-    else:
-        for i in range(8):
-            LISTE_BOUTTONS[i].destroy()
-        menu.destroy()
-        retour.destroy()
-        gagne.destroy()
-        perdu.destroy()
-        canvas.delete("all")
-        sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Helvetica", "16"))
-        sauvegarder.grid_configure(row=3, column=5)
-        sauvegarder_oui.config(text="Oui", font=("Helvetica", "8"), command=lambda : Sauvegarde(ligne, colonne))
-        sauvegarder_oui.grid_configure(row=5, column=4)
-        sauvegarder_non.config(text="Non", font=("Helvetica", "8"), command=PasdeSauvegarde())
-        sauvegarder_non.grid_configure(row=5, column=6)
+    menu.destroy()
+    retour.destroy()
+    gagne.destroy()
+    perdu.destroy()
+    canvas.delete("all")
+
+    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Helvetica", "16"))
+    sauvegarder.grid_configure(row=3, column=5)
+
+    sauvegarder_oui.config(text="Oui", font=("Helvetica", "8"), command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
+    sauvegarder_oui.grid_configure(row=5, column=4)
+
+    sauvegarder_non.config(text="Non", font=("Helvetica", "8"), command=PasdeSauvegarde)
+    sauvegarder_non.grid_configure(row=5, column=6)
 
 
 
@@ -249,7 +191,7 @@ def Retour(colonne_total):
                 LISTE_JEU_COMPLET.pop()
                 
         else:
-            for j in range(colonne_total):
+            for j in range(colonne):
                 canvas.delete(CERCLE[ligne][j])
                 canvas.delete(PIONS_BP[ligne][j])
                 canvas.delete(PIONS_MP[ligne][j])    
@@ -264,7 +206,6 @@ def Retour(colonne_total):
 def bienPlace(n, ligne, intervalleY):
     '''Compte les pions bien plaçés et les affiches'''
     global PIONS_BP
-    global PIONS_MP
     x1, x2 = 300, 310
     y1 = 50 + (intervalleY/4 - 5) + (intervalleY)*(ligne-1)
     y2 = 50 + (intervalleY/4 + 5) + (intervalleY)*(ligne-1)
@@ -275,6 +216,7 @@ def bienPlace(n, ligne, intervalleY):
 
 def malPlace(n, ligne, intervalleY):
     '''Compte les pions mal plaçés et les affiches'''
+    global PIONS_MP
     x1, x2 = 300, 310
     y1 = 50 + (intervalleY*(3/4) - 5) + (intervalleY)*(ligne-1)
     y2 = 50 + (intervalleY*(3/4) + 5) + (intervalleY)*(ligne-1)
@@ -300,7 +242,7 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX):
     ligne = int(len(LISTE_JEU_COMPLET) // colonne_total)
     
     if ligne >= ligne_total:
-        Defaite(ligne, colonne)
+        Defaite(ligne_total)
     else:
         if colonne == 1:
             LISTE_JEU.append([])
@@ -319,7 +261,7 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX):
             CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
         
         else :
-            colonne = colonne - 1
+            colonne = colonne_total - 1
             LISTE_JEU[ligne-1].append(couleur)
             # test #
             print(LISTE_CODE, LISTE_JEU)
@@ -330,7 +272,7 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX):
             y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne-1)
             CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
             if LISTE_JEU[ligne-1] == LISTE_CODE:
-                Victoire(ligne, colonne)
+                Victoire(ligne_total)
             else:
                 bien_place = 0
                 mal_place = 0
@@ -353,7 +295,7 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX):
         
         
 
-def Recuperation(condition, ligne_total, colonne_total, intervalleY, intervalleX):
+def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, intervalleX):
     global LISTE_JEU_COMPLET
     global LISTE_JEU
     global CERCLE
@@ -361,13 +303,13 @@ def Recuperation(condition, ligne_total, colonne_total, intervalleY, intervalleX
     global Dict_couleurs
     global Dict_liste_jeu
 
-    if condition == 1:
+    if recuperation is True:
         LISTE_CODE = Dict_liste_jeu["Liste code"]
         for i in range(len(LISTE_JEU_COMPLET)):
             colonne = (i+1) % colonne_total
             ligne = int((i+1) // colonne_total)
             if ligne > ligne_total:
-                Defaite(ligne, colonne)
+                Defaite()
             else:
                 if colonne == 1:
                     x1 = 10 + (intervalleX/2 - 10)
@@ -382,7 +324,7 @@ def Recuperation(condition, ligne_total, colonne_total, intervalleY, intervalleX
                     y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)
                     CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])  
                 else :
-                    colonne = colonne - 1
+                    colonne = colonne_total - 1
                     x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne)
                     x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne)
                     y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne-1)
@@ -390,7 +332,7 @@ def Recuperation(condition, ligne_total, colonne_total, intervalleY, intervalleX
                     CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
 
                     if LISTE_JEU[ligne-1] == LISTE_CODE:
-                        Victoire(ligne, colonne)
+                        Victoire()
                     else:
                         bien_place = 0
                         mal_place = 0
@@ -414,10 +356,8 @@ def Recuperation(condition, ligne_total, colonne_total, intervalleY, intervalleX
 
 # Création fonction deux joueurs #
 
-def deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
+def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
     '''Permet de démarrer le jeu à 2 joueurs'''
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
     global LISTE_CODE
     global CERCLE
     global PIONS_BP
@@ -426,19 +366,20 @@ def deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation
     global Dict_couleurs
 
     JOUEURS = 2
+    nb_couleurs = len(liste_couleurs)
 
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
    
-    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
+    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Menu(ligne, colonne, nb_couleurs))
     menu.place_configure(x=40, y=5)
-    retour.config(text="←", font=("Helvetica", "8"), bg="papaya whip", command=Retour(colonne))
+    retour.config(text="←", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Retour(colonne))
     retour.place_configure(x=10, y=5)
 
-    PIONS_BP = [[0]*4 for x in range(ligne)]
-    PIONS_MP = [[0]*4 for x in range(ligne)]
+    PIONS_BP = [[0]*colonne for x in range(ligne)]
+    PIONS_MP = [[0]*colonne for x in range(ligne)]
     CERCLE = [[0]*colonne for x in range(ligne)]
-
+    LISTE_BOUTTONS = [0]*nb_couleurs
 
     # Création de la grille #
     x1, y1 = 10, 50
@@ -457,10 +398,10 @@ def deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation
 
     # Création du jeu (colonne secret) #
     for a in range(colonne):
-        print(couleurs)
+        print(liste_couleurs)
         couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
-        while not (couleur_secret in couleurs):
-            print(couleurs)
+        while not (couleur_secret in liste_couleurs):
+            print(liste_couleurs)
             couleur_secret = str(input("Choisissez la couleur numéro "+str(a+1)+" parmi les couleurs présentes :\n"))
         LISTE_CODE.append(couleur_secret)
 
@@ -469,23 +410,19 @@ def deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation
     
     Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX)
 
-    nb_couleurs = len(couleurs)
-    x = 0
-    for i in range(nb_couleurs):
-        LISTE_BOUTTONS[i].grid_configure(row=8, column=x)
-        x += 1
-    for j in range(nb_couleurs):
-        def fonction_lambda(z = couleurs[j]):
-            Jeu(z, ligne, colonne, intervalleY, intervalleX)
-        LISTE_BOUTTONS[j].configure(text="●", font=("Helvetica", "8"), bg=couleurs[j], command=fonction_lambda)
+    b = 0
+    for n in range(nb_couleurs):
+        def fonction_lambda(a=liste_couleurs[n]):
+            Jeu(a, ligne, colonne, intervalleY, intervalleX)
+        LISTE_BOUTTONS[n] = tk.Button(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].grid(row=8, column=b)
+        b += 1
 
 
 # Création fonction un joueur #
 
-def unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
+def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
     '''Permet de démarrer le jeu à 1 joueur'''
-    global LISTE_JEU
-    global LISTE_JEU_COMPLET
     global LISTE_CODE
     global CERCLE
     global PIONS_BP
@@ -495,6 +432,7 @@ def unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
     global LISTE_BOUTTONS
 
     JOUEURS = 1
+    nb_couleurs = len(liste_couleurs)
 
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
@@ -502,17 +440,18 @@ def unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
     # Création du jeu #
     retour.config(text="←", font=("Helvetica", "8"), bg="papaya whip", command=lambda: Retour(colonne))
     retour.place_configure(x=10, y=5)
-    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=Menu)
+    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Menu(ligne, colonne, nb_couleurs))
     menu.place_configure(x=40, y=5)
 
-    PIONS_BP = [[0]*4 for x in range(ligne)]
-    PIONS_MP = [[0]*4 for x in range(ligne)]
+    PIONS_BP = [[0]*colonne for x in range(ligne)]
+    PIONS_MP = [[0]*colonne for x in range(ligne)]
     CERCLE = [[0]*colonne for x in range(ligne)]
+    LISTE_BOUTTONS = [0]*nb_couleurs
        
     a = 0
     for i in range(colonne):
-        a = rd.randint(0, len(couleurs)-1)
-        LISTE_CODE.append(couleurs[a])
+        a = rd.randint(0, len(liste_couleurs)-1)
+        LISTE_CODE.append(liste_couleurs[a])
 
     for j in range(colonne):
         Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
@@ -535,60 +474,60 @@ def unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
     Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX)
 
     # Création des boûtons
-    nb_couleurs = len(couleurs)
     b = 0
     for n in range(nb_couleurs):
-        LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
-        b += 1
-    for o in range(nb_couleurs):
-        def fonction_lambda(a=couleurs[o]):
+        def fonction_lambda(a=liste_couleurs[n]):
             Jeu(a, ligne, colonne, intervalleY, intervalleX)
-        LISTE_BOUTTONS[o].configure(text="●", font=("Helvetica", "8"), bg=couleurs[o], command=fonction_lambda)
+        LISTE_BOUTTONS[n] = tk.Button(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].grid(row=8, column=b)
+        b += 1
     
 
 # Création de la pré-partie #
 
-def Partie_personnalise(liste_couleurs):
+def Partie_personnalise(liste_couleurs, ligne, colonne):
 
     CHARGER_PARTIE.destroy()
     PARTIE_PERSONNALISE.destroy()
 
-    ligne = int(input("Combien d'essais (entre 3 et 15)"))
-    while ligne<3 or ligne>15:
-        ligne = int(input("Combien d'essais (entre 3 et 15)"))
-    colonne = int(input("Longueur du colonne (entre 2 et 6)"))
-    while colonne<2 or colonne>6:
-        colonne = int(input("Combien d'essais (entre 2 et 6)"))
-    nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
-    while nb_couleurs<2 or nb_couleurs>10:
-        nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
-
-    couleurs = liste_couleurs[:nb_couleurs]
-    intervalleX = 280/colonne
-    intervalleY = 480/ligne
-
     if JOUEURS == 1:
-        unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, RECUPERATION)
+        intervalleX = 280/colonne
+        intervalleY = 480/ligne
+        unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation = True)
     elif JOUEURS == 2:
-        deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, RECUPERATION)
+        intervalleX = 280/colonne
+        intervalleY = 480/ligne
+        deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation = True)
+
     else:
-        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, ligne, colonne, intervalleY, intervalleX, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        Ligne = int(input("Combien d'essais (entre 3 et 15)"))
+        while Ligne<3 or Ligne>15:
+            Ligne = int(input("Combien d'essais (entre 3 et 15)"))
+        Colonne = int(input("Longueur du colonne (entre 2 et 6)"))
+        while Colonne<2 or Colonne>6:
+            Colonne = int(input("Combien d'essais (entre 2 et 6)"))
+        nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
+        while nb_couleurs<2 or nb_couleurs>10:
+            nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
+
+        couleurs = liste_couleurs[:nb_couleurs]
+        intervalleX = 280/Colonne
+        intervalleY = 480/Ligne
+
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Helvetica", "16"), bg="brown")
         mode_un_joueur.grid(row=2, column=5)
-        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, ligne, colonne, intervalleY, intervalleX, RECUPERATION), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Helvetica", "16"), bg="brown")
         mode_deux_joueurs.grid(row=6, column=5)
-    
-    return ligne, colonne, couleurs, intervalleY, intervalleX
+
 
 # Charger la partie précédente #
 
-def Charger():
+def Charger(liste_couleurs):
     global LISTE_JEU
     global LISTE_JEU_COMPLET
+    global LISTE_CODE
     global Dict_liste_jeu
-    global RECUPERATION
     global JOUEURS
-
-    RECUPERATION = 1
 
     # Récupération des données #
     fichier = open("./sauvegarde.py")
@@ -598,30 +537,20 @@ def Charger():
     print(Dict_liste_jeu)
 
     JOUEURS = Dict_liste_jeu["Joueurs"]
+    LISTE_JEU = Dict_liste_jeu["Liste du jeu 2D"]
+    LISTE_JEU_COMPLET = Dict_liste_jeu["Liste du jeu complet"]
+    LISTE_CODE = Dict_liste_jeu["Liste code"]
+    ligne = Dict_liste_jeu["ligne"]
+    colonne = Dict_liste_jeu["colonne"]
+    nb_couleurs = Dict_liste_jeu["Nombre de couleurs"]
+    nv_liste_couleurs = liste_couleurs[:nb_couleurs]
 
-    if Dict_liste_jeu["Mode"] == "Tres facile":
-        LISTE_JEU = Dict_liste_jeu["Tres facile"][0]
-        LISTE_JEU_COMPLET = Dict_liste_jeu["Tres facile"][1]
-        tresFacile()
-    elif Dict_liste_jeu["Mode"] == "Facile":
-        LISTE_JEU = Dict_liste_jeu["Facile"][0]
-        LISTE_JEU_COMPLET = Dict_liste_jeu["Facile"][1]
-        Facile()
-    elif Dict_liste_jeu["Mode"] == "Classique":
-        LISTE_JEU = Dict_liste_jeu["Classique"][0]
-        LISTE_JEU_COMPLET = Dict_liste_jeu["Classique"][1]
-        Classique()
-    else:
-        LISTE_JEU = Dict_liste_jeu["IMPOSSIBLE"][0]
-        LISTE_JEU_COMPLET = Dict_liste_jeu["IMPOSSIBLE"][1]
-        IMPOSSIBLE()
-
+    Partie_personnalise(nv_liste_couleurs, ligne, colonne)
 
 
 # Création du menu #
 
-def Accueil(liste_couleurs):
-    global test
+def Accueil(liste_couleurs, repetition):
     global PARTIE_PERSONNALISE
     global CHARGER_PARTIE
     global mode_un_joueur
@@ -633,7 +562,7 @@ def Accueil(liste_couleurs):
     global sauvegarder_oui
     global sauvegarder_non
 
-    if test > 0:
+    if repetition == 1:
         mode_un_joueur = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
         mode_un_joueur.place(x=1000, y=0)
         mode_deux_joueurs = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
@@ -668,24 +597,10 @@ def Accueil(liste_couleurs):
         PARTIE_PERSONNALISE = tk.Button(fenetre)
         PARTIE_PERSONNALISE.grid(row=7, column=5)
 
-        for i in range(8):
-            LISTE_BOUTTONS[i] = tk.Button(text="", font=("Helvetica", "1"), bg="papaya whip")
-            LISTE_BOUTTONS[i].place(x=1000, y=0)
 
-        for j in range(12):
-            for k in range(4):
-                PIONS_BP[j][k] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-
-        for l in range(12):
-            for m in range(4):
-                PIONS_MP[l][m] = canvas.create_oval((0,0),(1,1), fill="papaya whip")
-     
-    CHARGER_PARTIE.config(text="Charger partie précédente", command=Charger, font=("Helvetica", "8"), bg="brown")
-    PARTIE_PERSONNALISE.config(text="Partie personnalisée", command=lambda : Partie_personnalise(liste_couleurs), font=("Helvetica", "8"), bg="brown")
+    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Helvetica", "8"), bg="brown")
+    PARTIE_PERSONNALISE.config(text="Partie personnalisée", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Helvetica", "8"), bg="brown")
 
 
-
-
-
-Accueil(LISTE_COULEURS)
+Accueil(LISTE_COULEURS, repetition = 0)
 fenetre.mainloop()
