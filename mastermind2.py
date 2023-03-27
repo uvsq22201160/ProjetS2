@@ -22,7 +22,7 @@ JOUEURS = 0
 LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan', 'grey', 'darkblue']
-LISTE_BOUTTONS = []
+LISTE_BOUTTONS = [0]*15
 LISTE_CODE = []
 CERCLE = [[]]
 PIONS_BP = [[]]
@@ -68,14 +68,18 @@ CHARGER_PARTIE.grid(row=3, column=5)
 PARTIE_PERSONNALISE = tk.Button(fenetre)
 PARTIE_PERSONNALISE.grid(row=7, column=5)
 
+for i in range(15):
+    LISTE_BOUTTONS[i] = tk.Button(fenetre)
+    LISTE_BOUTTONS[i].place(x=1000, y=0)
+
 
 # Canvas victoire #
 
-def Victoire(ligne):
+def Victoire():
     '''Détruis les boutons et affiche que le joueur a gagné(e)'''
     global LISTE_BOUTTONS
 
-    for i in range(ligne):
+    for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     gagne.config(text="Vous avez gagné !", font=("Helvetica", "14"), bg="papaya whip")
@@ -83,11 +87,11 @@ def Victoire(ligne):
 
 # Canvas défaite #
 
-def Defaite(ligne):
+def Defaite():
     '''Détruis les boutons et affiche que le joueur a perdu(e)'''
     global LISTE_BOUTTONS
   
-    for i in range(ligne):
+    for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
     perdu.config(text="Vous avez perdu !", font=("Helvetica", "14"), bg="papaya whip")
@@ -225,6 +229,44 @@ def malPlace(n, ligne, intervalleY):
         x1, x2 = x1+15, x2+15
 
 
+def verification_post_jeu(ligne, ligne_total, colonne_total, intervalleY):
+    global LISTE_JEU
+    global LISTE_CODE
+    global Dict_couleurs
+
+    if ligne+1 >= ligne_total:
+        Defaite()
+    else:
+        if LISTE_JEU[ligne] == LISTE_CODE:
+            Victoire()
+        else:
+            bien_place = 0
+            mal_place = 0
+            for i in range(colonne_total):
+                Dict_couleurs[LISTE_CODE[i]] = LISTE_CODE.count(LISTE_CODE[i])
+            for j in range(colonne_total):
+                Dict_couleurs[LISTE_JEU[ligne][j]] -= 1
+                if Dict_couleurs[LISTE_JEU[ligne][j]] >= 0:
+                    if (LISTE_JEU[ligne][j] == LISTE_CODE[j]):
+                        bien_place += 1
+                    elif (LISTE_JEU[ligne][j] in LISTE_CODE) and (LISTE_JEU[ligne][j] != LISTE_CODE[j]):
+                        mal_place += 1
+                elif Dict_couleurs[LISTE_JEU[ligne][j]] < 0 and (LISTE_JEU[ligne][j] == LISTE_CODE[j]):
+                    bien_place += 1
+                    mal_place -= 1
+            bienPlace(bien_place, ligne+1, intervalleY)
+            malPlace(mal_place, ligne+1, intervalleY)
+
+
+
+def creation_cercle(ligne, colonne, intervalleY, intervalleX, couleur):
+    global CERCLE
+
+    x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne)
+    x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne)
+    y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne)
+    y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)  
+    CERCLE[ligne][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)  
 
 # Création partie interactive #
 
@@ -240,60 +282,34 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX):
     LISTE_JEU_COMPLET.append(couleur)
     colonne = len(LISTE_JEU_COMPLET) % colonne_total
     ligne = int(len(LISTE_JEU_COMPLET) // colonne_total)
-    
-    if ligne >= ligne_total:
-        Defaite(ligne_total)
-    else:
-        if colonne == 1:
-            LISTE_JEU.append([])
-            LISTE_JEU[ligne].append(couleur)
-            x1 = 10 + (intervalleX/2 - 10)
-            x2 = 10 + (intervalleX/2 + 10)
-            y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne)
-            y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)
-            CERCLE[ligne][0] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-        elif colonne != 0:
-            LISTE_JEU[ligne].append(couleur)
-            x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne-1)
-            x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne-1)
-            y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne)
-            y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)
-            CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-        
-        else :
-            colonne = colonne_total - 1
-            LISTE_JEU[ligne-1].append(couleur)
-            # test #
-            print(LISTE_CODE, LISTE_JEU)
-            # test #
-            x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne)
-            x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne)
-            y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne-1)
-            y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne-1)
-            CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=couleur)
-            if LISTE_JEU[ligne-1] == LISTE_CODE:
-                Victoire(ligne_total)
-            else:
-                bien_place = 0
-                mal_place = 0
-                for i in range(colonne_total):
-                    Dict_couleurs[LISTE_CODE[i]] = LISTE_CODE.count(LISTE_CODE[i])
-                for j in range(colonne_total):
-                    Dict_couleurs[LISTE_JEU[ligne-1][j]] -= 1
-                    if Dict_couleurs[LISTE_JEU[ligne-1][j]] >= 0:
-                        if (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
-                            bien_place += 1
-                        elif (LISTE_JEU[ligne-1][j] in LISTE_CODE) and (LISTE_JEU[ligne-1][j] != LISTE_CODE[j]):
-                            mal_place += 1
-                    elif Dict_couleurs[LISTE_JEU[ligne-1][j]] < 0 and (LISTE_JEU[ligne-1][j] == LISTE_CODE[j]):
-                        bien_place += 1
-                        mal_place -= 1
 
-                bienPlace(bien_place, ligne, intervalleY)
-                malPlace(mal_place, ligne, intervalleY)
-                
-        
-        
+    Ligne = 0
+    Colonne = 0
+    
+    if colonne == 1:
+        LISTE_JEU.append([])
+        LISTE_JEU[ligne].append(couleur)
+        Colonne = 0
+        creation_cercle(ligne, Colonne, intervalleY, intervalleX, couleur)
+
+    elif colonne != 0:
+        LISTE_JEU[ligne].append(couleur)
+        Colonne = colonne-1
+        creation_cercle(ligne, Colonne, intervalleY, intervalleX, couleur)
+    
+    else :
+        LISTE_JEU[ligne-1].append(couleur)
+        Colonne = colonne_total-1
+        Ligne = ligne-1
+        # test #
+        print(LISTE_CODE, LISTE_JEU)
+        # test #
+        creation_cercle(Ligne, Colonne, intervalleY, intervalleX, couleur)
+        verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
+                        
+
+
+
 
 def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, intervalleX):
     global LISTE_JEU_COMPLET
@@ -303,55 +319,25 @@ def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, interval
     global Dict_couleurs
     global Dict_liste_jeu
 
+    Colonne = 0
+    Ligne = 0
+
     if recuperation is True:
         LISTE_CODE = Dict_liste_jeu["Liste code"]
         for i in range(len(LISTE_JEU_COMPLET)):
             colonne = (i+1) % colonne_total
             ligne = int((i+1) // colonne_total)
-            if ligne > ligne_total:
-                Defaite()
-            else:
-                if colonne == 1:
-                    x1 = 10 + (intervalleX/2 - 10)
-                    x2 = 10 + (intervalleX/2 + 10)
-                    y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne)
-                    y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)
-                    CERCLE[ligne][0] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
-                elif colonne != 0:
-                    x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne-1)
-                    x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne-1)
-                    y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne)
-                    y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne)
-                    CERCLE[ligne][colonne-1] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])  
-                else :
-                    colonne = colonne_total - 1
-                    x1 = 10 + (intervalleX/2 - 10) + (intervalleX)*(colonne)
-                    x2 = 10 + (intervalleX/2 + 10) + (intervalleX)*(colonne)
-                    y1 = 50 + (intervalleY/2 - 10) + (intervalleY)*(ligne-1)
-                    y2 = 50 + (intervalleY/2 + 10) + (intervalleY)*(ligne-1)
-                    CERCLE[ligne-1][colonne] = canvas.create_oval(x1, y1, x2, y2, fill=LISTE_JEU_COMPLET[i])
-
-                    if LISTE_JEU[ligne-1] == LISTE_CODE:
-                        Victoire()
-                    else:
-                        bien_place = 0
-                        mal_place = 0
-                        for j in range(colonne_total):
-                            Dict_couleurs[LISTE_CODE[j]] = LISTE_CODE.count(LISTE_CODE[j])
-                        for k in range(colonne_total):
-                            Dict_couleurs[LISTE_JEU[ligne-1][k]] -= 1
-                            if Dict_couleurs[LISTE_JEU[ligne-1][k]] >= 0:
-                                if (LISTE_JEU[ligne-1][k] == LISTE_CODE[k]):
-                                    bien_place += 1
-                                elif (LISTE_JEU[ligne-1][k] in LISTE_CODE) and (LISTE_JEU[ligne-1][k] != LISTE_CODE[k]):
-                                    mal_place += 1
-                            elif Dict_couleurs[LISTE_JEU[ligne-1][k]] < 0 and (LISTE_JEU[ligne-1][k] == LISTE_CODE[k]):
-                                bien_place += 1
-                                mal_place -= 1
-
-                        bienPlace(bien_place, ligne, intervalleY)
-                        malPlace(mal_place, ligne, intervalleY)
-
+            if colonne == 1:
+                Colonne = 0
+                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i])
+            elif colonne != 0:
+                Colonne = colonne-1
+                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
+            else :
+                Colonne = colonne_total-1
+                Ligne = ligne-1
+                creation_cercle(Ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
+                verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
 
 
 # Création fonction deux joueurs #
@@ -414,8 +400,8 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
             Jeu(a, ligne, colonne, intervalleY, intervalleX)
-        LISTE_BOUTTONS[n] = tk.Button(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
-        LISTE_BOUTTONS[n].grid(row=8, column=b)
+        LISTE_BOUTTONS[n].configure(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
         b += 1
 
 
@@ -446,7 +432,6 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
     PIONS_BP = [[0]*colonne for x in range(ligne)]
     PIONS_MP = [[0]*colonne for x in range(ligne)]
     CERCLE = [[0]*colonne for x in range(ligne)]
-    LISTE_BOUTTONS = [0]*nb_couleurs
        
     a = 0
     for i in range(colonne):
@@ -478,8 +463,8 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
             Jeu(a, ligne, colonne, intervalleY, intervalleX)
-        LISTE_BOUTTONS[n] = tk.Button(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
-        LISTE_BOUTTONS[n].grid(row=8, column=b)
+        LISTE_BOUTTONS[n].configure(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
         b += 1
     
 
@@ -501,13 +486,13 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
 
     else:
         Ligne = int(input("Combien d'essais (entre 3 et 15)"))
-        while Ligne<3 or Ligne>15:
+        while not 3<=Ligne<=15:
             Ligne = int(input("Combien d'essais (entre 3 et 15)"))
         Colonne = int(input("Longueur du colonne (entre 2 et 6)"))
-        while Colonne<2 or Colonne>6:
+        while not 2<=Colonne<=6:
             Colonne = int(input("Combien d'essais (entre 2 et 6)"))
         nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
-        while nb_couleurs<2 or nb_couleurs>10:
+        while not 2<=nb_couleurs<=6:
             nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
 
         couleurs = liste_couleurs[:nb_couleurs]
@@ -525,7 +510,6 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
 def Charger(liste_couleurs):
     global LISTE_JEU
     global LISTE_JEU_COMPLET
-    global LISTE_CODE
     global Dict_liste_jeu
     global JOUEURS
 
@@ -539,7 +523,6 @@ def Charger(liste_couleurs):
     JOUEURS = Dict_liste_jeu["Joueurs"]
     LISTE_JEU = Dict_liste_jeu["Liste du jeu 2D"]
     LISTE_JEU_COMPLET = Dict_liste_jeu["Liste du jeu complet"]
-    LISTE_CODE = Dict_liste_jeu["Liste code"]
     ligne = Dict_liste_jeu["ligne"]
     colonne = Dict_liste_jeu["colonne"]
     nb_couleurs = Dict_liste_jeu["Nombre de couleurs"]
@@ -596,6 +579,10 @@ def Accueil(liste_couleurs, repetition):
         CHARGER_PARTIE.grid(row=0, column=5)
         PARTIE_PERSONNALISE = tk.Button(fenetre)
         PARTIE_PERSONNALISE.grid(row=7, column=5)
+        
+        for i in range(15):
+            LISTE_BOUTTONS[i] = tk.Button(fenetre)
+            LISTE_BOUTTONS[i].place(x=1000, y=0)
 
 
     CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Helvetica", "8"), bg="brown")
