@@ -2,11 +2,11 @@ import tkinter as tk
 import random as rd
 from json import *
 
-     #################################################################################################
-    #                                                                                                 #
-   #   Mastermind   :    Gaël FERREIRA RODRIGUEZ / Elise MOULIN / César PITIGLIANO / Noel-Marie N'dri  #
-    #                                                                                                 #
-     #################################################################################################
+   ###############################################################################################
+ #                                                                                                 #
+#   Mastermind   :    Gaël FERREIRA RODRIGUEZ / Elise MOULIN / César PITIGLIANO / Noël-Marie N'dri  #
+ #                                                                                                 #
+   ###############################################################################################
 
 
 # Conditions initiales #
@@ -18,7 +18,7 @@ LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
 LISTE_CODE = []
 CERCLE = [[]]
-CERCLE2 = []
+CERCLE2 = [[]]
 PIONS_BP = [[]]
 PIONS_MP = [[]]
 LISTE_BOUTTONS = [0]*15
@@ -31,7 +31,7 @@ HEIGHT = 600
 WIDTH = 600
 fenetre = tk.Tk()
 fenetre.title("Mastermind")
-canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='papaya whip')
+canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='old lace')
 canvas.grid(row=0, column=0, rowspan=9, columnspan=11)
 
 
@@ -81,8 +81,8 @@ def Victoire():
     for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    gagne.config(text="Vous avez gagné !", font=("Helvetica", "14"), bg="papaya whip")
-    gagne.place_configure(x=390, y=300)
+    gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="old lace")
+    gagne.place_configure(x=420, y=300)
 
 
 # Canvas défaite #
@@ -94,8 +94,8 @@ def Defaite():
     for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    perdu.config(text="Vous avez perdu !", font=("Helvetica", "14"), bg="papaya whip")
-    perdu.place_configure(x=390, y=300)
+    perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="old lace")
+    perdu.place_configure(x=420, y=300)
 
 # Sauvegarder #
 
@@ -155,13 +155,14 @@ def Menu(ligne, colonne, nb_couleurs):
     retour.destroy()
     gagne.destroy()
     perdu.destroy()
+    help.destroy()
     canvas.delete("all")
 
-    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Helvetica", "16"), bg="papaya whip")
+    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Calibri", "18"), bg="old lace")
     sauvegarder.grid_configure(row=3, column=5)
-    sauvegarder_oui.config(text="Oui", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
+    sauvegarder_oui.config(text="Oui", font=("Calibri", "16"), bg="old lace", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
     sauvegarder_oui.grid_configure(row=5, column=4)
-    sauvegarder_non.config(text="Non", font=("Helvetica", "8"), bg="papaya whip", command=PasdeSauvegarde)
+    sauvegarder_non.config(text="Non", font=("Calibri", "16"), bg="old lace", command=PasdeSauvegarde)
     sauvegarder_non.grid_configure(row=5, column=6)
 
 
@@ -174,13 +175,11 @@ def Retour(colonne_total):
     colonne = len(LISTE_JEU_COMPLET) % colonne_total
     ligne = int(len(LISTE_JEU_COMPLET) // colonne_total)
 
-    for k in range(colonne_total):
-        canvas.delete(CERCLE2[k])
-
     if LISTE_JEU_COMPLET != []:
         if colonne == 0:
             for i in range(colonne_total):
                 canvas.delete(CERCLE[ligne-1][i])
+                canvas.delete(CERCLE2[ligne-1][i])
                 canvas.delete(PIONS_BP[ligne-1][i])
                 canvas.delete(PIONS_MP[ligne-1][i])
                 LISTE_JEU[ligne-1].pop()
@@ -188,6 +187,7 @@ def Retour(colonne_total):
         else:
             for j in range(colonne):
                 canvas.delete(CERCLE[ligne][j])
+                canvas.delete(CERCLE2[ligne][i])
                 canvas.delete(PIONS_BP[ligne][j])
                 canvas.delete(PIONS_MP[ligne][j])    
                 LISTE_JEU[ligne].pop()
@@ -264,7 +264,7 @@ def creation_grille(x1, x2, y1, y2, ligne, colonne, intervalleY, intervalleX):
     x_initial = x1
     for i in range(ligne):
         for j in range(colonne):
-            canvas.create_rectangle(x1, y1, x2, y2, fill="saddle brown")
+            canvas.create_rectangle(x1, y1, x2, y2, fill="sandy brown")
             x1, x2 = x2, x2+intervalleX
         y1, y2 = y2, y2+intervalleY
         x1 = x_initial
@@ -272,7 +272,7 @@ def creation_grille(x1, x2, y1, y2, ligne, colonne, intervalleY, intervalleX):
 
 # Création des cercles de couleurs pour l'aide #
 
-def creation_cercle2(liste_aide):
+def creation_cercle2(liste_aide, ligne):
     global CERCLE2
 
     intervalleX = 150 / len(liste_aide)
@@ -281,11 +281,11 @@ def creation_cercle2(liste_aide):
     for i in range(len(liste_aide)):
         x1 = 400 + (intervalleX/2 - 10) + (intervalleX)*(i)
         x2 = 400 + (intervalleX/2 + 10) + (intervalleX)*(i)
-        CERCLE2[i] = canvas.create_oval(x1, y1, x2, y2, fill=liste_aide[i])  
+        CERCLE2[ligne][i] = canvas.create_oval(x1, y1, x2, y2, fill=liste_aide[i])  
 
 # Création de la fonction aide #
 
-def Help(pionsBP, pionsMP, liste_jeu, liste_couleurs):
+def Help(pionsBP, pionsMP, liste_jeu, liste_couleurs, ligne):
     liste_aide = [0]*len(liste_jeu)
     numero_couleur = 0
     numero_couleur2 = 0
@@ -309,7 +309,7 @@ def Help(pionsBP, pionsMP, liste_jeu, liste_couleurs):
         if liste_aide[k] == 0:
             liste_aide[k] = liste_couleurs[numero_couleur]
 
-    creation_cercle2(liste_aide)
+    creation_cercle2(liste_aide, ligne)
     help.config(command=fonctionNull)
 
 # Création partie interactive #
@@ -344,8 +344,7 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX, liste_cou
         verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
         pionsBP = len(PIONS_BP[Ligne]) - PIONS_BP[Ligne].count(0)
         pionsMP = len(PIONS_MP[Ligne]) - PIONS_BP[Ligne].count(0)
-        help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs))
-        help.place_configure(x=400, y=5)
+        help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs, Ligne))
                         
 
 # Création de la fonction récupération #
@@ -383,21 +382,21 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
 
     JOUEURS = 2
 
-    mode_un_joueur.destroy()
-    mode_deux_joueurs.destroy()
-    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Menu(ligne, colonne, nb_couleurs))
-    menu.place_configure(x=40, y=5)
-    retour.config(text="←", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Retour(colonne))
-    retour.place_configure(x=10, y=5)
-    help.config(text="?", font=("Helvetica", "8"), bg="papaya whip")
-    help.grid_configure(row=0, column=10)
-
     nb_couleurs = len(liste_couleurs)
     PIONS_BP = [[0]*colonne for x in range(ligne)]
     PIONS_MP = [[0]*colonne for x in range(ligne)]
     CERCLE = [[0]*colonne for x in range(ligne)]
-    CERCLE2 = [0]*colonne
+    CERCLE2 = [[0]*colonne for x in range(ligne)]
     LISTE_BOUTTONS = [0]*nb_couleurs
+
+    mode_un_joueur.destroy()
+    mode_deux_joueurs.destroy()
+    menu.config(text="MENU", font=("Calibri", "8"), bg="white", command=lambda : Menu(ligne, colonne, nb_couleurs))
+    menu.place_configure(x=40, y=5)
+    retour.config(text="←", font=("Calibri", "8"), bg="white", command=lambda : Retour(colonne))
+    retour.place_configure(x=10, y=5)
+    help.config(text="?", font=("Calibri", "8"), bg="white", command=fonctionNull)
+    help.place_configure(x=400, y=5)
 
     x1, y1 = 10, 50  # Création de la grille #
     x2 = x1+intervalleX
@@ -423,7 +422,7 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
             Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs)
-        LISTE_BOUTTONS[n].configure(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].configure(text="●", font=("Calibri", "8"), bg=liste_couleurs[n], command=fonction_lambda)
         LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
         b += 1
 
@@ -438,18 +437,18 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
 
     mode_un_joueur.destroy()
     mode_deux_joueurs.destroy()
-    retour.config(text="←", font=("Helvetica", "8"), bg="papaya whip", command=lambda: Retour(colonne))
+    retour.config(text="←", font=("Calibri", "12"), bg="snow", command=lambda: Retour(colonne))
     retour.place_configure(x=10, y=5)
-    menu.config(text="MENU", font=("Helvetica", "8"), bg="papaya whip", command=lambda : Menu(ligne, colonne, nb_couleurs))
-    menu.place_configure(x=40, y=5)
-    help.config(text="?", font=("Helvetica", "8"), bg="papaya whip")
-    
+    menu.config(text="MENU", font=("Calibri", "12"), bg="snow", command=lambda : Menu(ligne, colonne, nb_couleurs))
+    menu.place_configure(x=50, y=5)
+    help.config(text="?", font=("Calibri", "12"), bg="snow")
+    help.place_configure(x=400, y=5)
 
     nb_couleurs = len(liste_couleurs) 
     PIONS_BP = [[0]*colonne for x in range(ligne)]
     PIONS_MP = [[0]*colonne for x in range(ligne)]
     CERCLE = [[0]*colonne for x in range(ligne)]  
-    CERCLE2 = [0]*colonne
+    CERCLE2 = [[0]*colonne for x in range(ligne)]
 
     a = 0 # Création du code secret
     for i in range(colonne):
@@ -476,7 +475,7 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
             Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs)
-        LISTE_BOUTTONS[n].configure(text="●", font=("Helvetica", "8"), bg=liste_couleurs[n], command=fonction_lambda)
+        LISTE_BOUTTONS[n].configure(text="●", font=("Calibri", "8"), bg=liste_couleurs[n], command=fonction_lambda)
         LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
         b += 1
     
@@ -512,9 +511,9 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
         intervalleX = 280/Colonne
         intervalleY = 480/Ligne
 
-        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Helvetica", "16"), bg="brown")
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="sandy brown")
         mode_un_joueur.grid(row=2, column=5)
-        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Helvetica", "16"), bg="brown")
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="sandy brown")
         mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -544,7 +543,7 @@ def Charger(liste_couleurs):
 
 def Accueil(liste_couleurs, repetition):
     global PARTIE_PERSONNALISE, CHARGER_PARTIE
-    global mode_un_joueur, mode_deux_joueurs, retour, menu, code, sauvegarder, sauvegarder_oui, sauvegarder_non
+    global mode_un_joueur, mode_deux_joueurs, retour, menu, help, sauvegarder, sauvegarder_oui, sauvegarder_non
    
     if repetition == 1:  # Si la fenêtre est lancée une deuxième fois, reinitialisé tous les boutons et "label"
         mode_un_joueur = tk.Button(fenetre)
@@ -578,8 +577,8 @@ def Accueil(liste_couleurs, repetition):
             LISTE_BOUTTONS[i].place(x=1000, y=0)
 
 
-    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Helvetica", "16"), bg="brown")
-    PARTIE_PERSONNALISE.config(text="Partie", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Helvetica", "16"), bg="brown")
+    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="sandy brown")
+    PARTIE_PERSONNALISE.config(text="Partie", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="sandy brown")
 
 
 Accueil(LISTE_COULEURS, repetition = 0)
