@@ -1,10 +1,2 @@
-- Créer une fonction qui permet de générer une liste de couleurs en fonction des pions bien plaçés et mal plaçés (en soi une IA) puis l'intégrer dans une 2e fenetre ou directement dans la fenêtre principale
-- Montrer les pions bien plaçés et mal plaçés de chaque round (pour plus de visibilité) FAIT
-
-- Créer une fonction menu qui sauvegarde la partie en cours (si elle n'est pas finie) et qui relance le programme
-  Pour cela, s'informer sur la fonction os (importe et exporte des données).
-  Essayer d'exporter la LISTE_JEU, LISTE_JEU_COMPLET, et les plaçer en fonction des différents modes et des joueurs (MODE). Importer ensuite si le mode et le nombre de joueur(s) est équivalent.
-  Demander si l'on sauvegarde ou pas avant de quitter et de relancer le programme.
-  FAIT AUTREMENT
-
-- Créer une troisième fonction IA où seul une IA joue (s'aider de la fonction aide)
+- Régler le problème suivant : une erreur apparait lorsqu'on a finit le jeu et qu'on le relance (problème d'initialisation de "LISTE_BOUTTONS" dans la fonction unJoueur ou deux Joueurs)
+- Créer une troisième fonction IA où seul une IA joue 
