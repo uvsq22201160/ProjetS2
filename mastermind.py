@@ -32,7 +32,7 @@ HEIGHT = 600
 WIDTH = 600
 fenetre = tk.Tk()
 fenetre.title("Mastermind")
-canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='old lace')
+canvas = tk.Canvas(fenetre, height=HEIGHT, width=WIDTH, bg='black')
 canvas.grid(row=0, column=0, rowspan=9, columnspan=11)
 
 
@@ -84,7 +84,7 @@ def Victoire():
     for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="old lace")
+    gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="black", fg="white")
     gagne.place_configure(x=420, y=300)
 
 
@@ -96,7 +96,7 @@ def Defaite():
     for i in range(15):
         LISTE_BOUTTONS[i].destroy()
     retour.destroy()
-    perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="old lace")
+    perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="black", fg="white")
     perdu.place_configure(x=420, y=300)
 
 
@@ -160,11 +160,11 @@ def Menu(ligne, colonne, nb_couleurs):
     help.destroy()
     canvas.delete("all")
 
-    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Calibri", "18"), bg="old lace")
+    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Calibri", "18"), bg="black", fg="snow")
     sauvegarder.grid_configure(row=3, column=5)
-    sauvegarder_oui.config(text="Oui", font=("Calibri", "16"), bg="old lace", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
+    sauvegarder_oui.config(text="Oui", font=("Calibri", "16"), bg="snow", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
     sauvegarder_oui.grid_configure(row=5, column=4)
-    sauvegarder_non.config(text="Non", font=("Calibri", "16"), bg="old lace", command=PasdeSauvegarde)
+    sauvegarder_non.config(text="Non", font=("Calibri", "16"), bg="snow", command=PasdeSauvegarde)
     sauvegarder_non.grid_configure(row=5, column=6)
 
 
@@ -344,7 +344,7 @@ def creation_grille(x1, x2, y1, y2, ligne, colonne, intervalleY, intervalleX):
     x_initial = x1
     for i in range(ligne):
         for j in range(colonne):
-            canvas.create_rectangle(x1, y1, x2, y2, fill="sandy brown")
+            canvas.create_rectangle(x1, y1, x2, y2, fill="saddle brown", outline="white", width=2)
             x1, x2 = x2, x2+intervalleX
         y1, y2 = y2, y2+intervalleY
         x1 = x_initial
@@ -430,7 +430,7 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
     x2, y2 = 10+intervalleX, 50+intervalleY # Création de la grille principale
     creation_grille(10, x2, 50, y2, ligne, colonne, intervalleY, intervalleX)
     for i in range(ligne):
-        canvas.create_rectangle(290, 50+(intervalleY*(i)), 390, 50+(intervalleY*(i+1)))
+        canvas.create_rectangle(290, 50+(intervalleY*(i)), 390, 50+(intervalleY*(i+1)), fill="saddle brown", outline="blue", width=2)
 
     x1, y1, y2 = 400, 50, 110 # Création de la grille aide
     x2 = x1+ (175/colonne)
@@ -476,7 +476,7 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
     x2, y2 = 10+intervalleX, 50+intervalleY # Création de la grille principale
     creation_grille(10, x2, 50, y2, ligne, colonne, intervalleY, intervalleX)
     for m in range(ligne):
-        canvas.create_rectangle(290, 50+(intervalleY*(m)), 390, 50+(intervalleY*(m+1)))
+        canvas.create_rectangle(290, 50+(intervalleY*(m)), 390, 50+(intervalleY*(m+1)), fill="sandy brown", outline="snow", width=2)
 
     x1, y1, y2 = 400, 50, 110 # Création de la grille aide
     x2 = x1+ (175/colonne)
@@ -533,15 +533,15 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
             while (vérifEntrees(nb_couleurs1) is False) or (not 2<=int(nb_couleurs1)<=10):
                 nb_couleurs1 = input("Nombre de couleurs (un chiffre entre 2 et 10)")
 
-        Ligne, Colonne, nb_couleurs = int(ligne1), int(colonne1), int(nb_couleurs1)
+            Ligne, Colonne, nb_couleurs = int(ligne1), int(colonne1), int(nb_couleurs1)
 
         couleurs = liste_couleurs[:nb_couleurs]
         intervalleX = 280/Colonne
         intervalleY = 480/Ligne
 
-        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="sandy brown")
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="snow")
         mode_un_joueur.grid(row=2, column=5)
-        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="sandy brown")
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="snow")
         mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -604,8 +604,8 @@ def Accueil(liste_couleurs, repetition):
             LISTE_BOUTTONS[i] = tk.Button(fenetre)
             LISTE_BOUTTONS[i].place(x=1000, y=0)
 
-    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="sandy brown")
-    PARTIE_PERSONNALISE.config(text="Partie", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="sandy brown")
+    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="snow")
+    PARTIE_PERSONNALISE.config(text="Partie", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="snow")
 
 
 Accueil(LISTE_COULEURS, repetition = 0) # Initialise le menu
