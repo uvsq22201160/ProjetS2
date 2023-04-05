@@ -493,6 +493,15 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
         b += 1
 
 
+### Inspiré de https://pynative.com/python-check-user-input-is-number-or-string/ ###
+def vérifEntrees(valeur):
+    try:
+        entree = int(valeur)
+        condition = True
+    except ValueError:
+        condition = False
+    return condition
+
 
 def Partie_personnalise(liste_couleurs, ligne, colonne):
     ''' Permet de choisir les différents paramètres de la partie'''
@@ -510,15 +519,21 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
         intervalleY = 480/ligne
         deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation = True)
     else:
-        Ligne = int(input("Combien d'essais (entre 3 et 15)"))
-        while not 3<=Ligne<=15:
-            Ligne = int(input("Combien d'essais (entre 3 et 15)"))
-        Colonne = int(input("Longueur du colonne (entre 2 et 6)"))
-        while not 2<=Colonne<=6:
-            Colonne = int(input("Combien d'essais (entre 2 et 6)"))
-        nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
-        while not 2<=nb_couleurs<=10:
-            nb_couleurs = int(input("Nombre de couleurs (entre 2 et 10)"))
+        mode_classique = input("Voulez-vous faire une partie en mode classique ? (taper 'oui' ou n'importe quoi d'autre)\n")
+        if mode_classique == "oui":
+            Ligne, Colonne, nb_couleurs = 12, 4, 8
+        else:
+            ligne1 = input("Combien d'essais (entre 3 et 15)")
+            while (vérifEntrees(ligne1) is False) or (not 3<=int(ligne1)<=15):
+                ligne1 = input("Combien d'essais (un chiffre entre 3 et 15)")
+            colonne1 = input("Longueur du colonne (entre 2 et 6)")
+            while (vérifEntrees(colonne1) is False) or (not 2<=int(colonne1)<=6):
+                colonne1 = input("Combien d'essais (un chiffre entre 2 et 6)")
+            nb_couleurs1 = input("Nombre de couleurs (entre 2 et 10)")
+            while (vérifEntrees(nb_couleurs1) is False) or (not 2<=int(nb_couleurs1)<=10):
+                nb_couleurs1 = input("Nombre de couleurs (un chiffre entre 2 et 10)")
+
+        Ligne, Colonne, nb_couleurs = int(ligne1), int(colonne1), int(nb_couleurs1)
 
         couleurs = liste_couleurs[:nb_couleurs]
         intervalleX = 280/Colonne
