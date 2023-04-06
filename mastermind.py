@@ -11,8 +11,14 @@ from json import *
 
 # Initialisation des variables #
 
-Dict_liste_jeu = {"Liste du jeu 2D":[[]], "Liste du jeu complet":[], "Liste code":[], "ligne":0, "colonne":0, "Nombre de couleurs":0 , "Joueurs":""}
-Dict_couleurs = {'black':0, 'green':0, 'blue':0, 'purple':0, 'yellow':0, 'orange':0, 'pink':0, 'cyan':0, 'grey':0, 'darkblue':0}
+Dict_liste_jeu = {
+    "Liste du jeu 2D":[[]],
+    "Liste du jeu complet":[],
+    "Liste code":[], "ligne":0,
+    "colonne":0,
+    "Nombre de couleurs":0,
+    "Joueurs":""}
+Dict_couleurs = {'black':0,'green':0, 'blue':0, 'purple':0, 'yellow':0, 'orange':0, 'pink':0, 'cyan':0, 'grey':0, 'darkblue':0}
 LISTE_COULEURS = ['black', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'cyan', 'grey', 'darkblue']
 LISTE_JEU = [[]]
 LISTE_JEU_COMPLET = []
@@ -77,27 +83,39 @@ def fonctionNull():
 
 
 
-def Victoire():
+def Victoire(repetition):
     '''Détruis les boutons et affiche que le joueur a gagné'''
     global LISTE_BOUTTONS
 
-    for i in range(15):
-        LISTE_BOUTTONS[i].destroy()
-    retour.destroy()
-    gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="black", fg="white")
-    gagne.place_configure(x=420, y=300)
+    if repetition == 1:
+        retour.destroy()
+        gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="black", fg="white")
+        gagne.place_configure(x=420, y=300)
+    else:
+        for i in range(15):
+            LISTE_BOUTTONS[i].destroy()
+        retour.destroy()
+        gagne.config(text="Vous avez gagné !", font=("Calibri", "14"), bg="black", fg="white")
+        gagne.place_configure(x=420, y=300)
 
 
 
-def Defaite():
+def Defaite(repetition):
     '''Détruis les boutons et affiche que le joueur a perdu'''
     global LISTE_BOUTTONS
 
-    for i in range(15):
-        LISTE_BOUTTONS[i].destroy()
-    retour.destroy()
-    perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="black", fg="white")
-    perdu.place_configure(x=420, y=300)
+    if repetition == 1:
+        for i in range(15):
+            LISTE_BOUTTONS[i].destroy()
+        retour.destroy()
+        perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="black", fg="white")
+        perdu.place_configure(x=420, y=300)
+    else:
+        for i in range(15):
+            LISTE_BOUTTONS[i].destroy()
+        retour.destroy()
+        perdu.config(text="Vous avez perdu !", font=("Calibri", "14"), bg="black", fg="white")
+        perdu.place_configure(x=420, y=300)
 
 
 
@@ -267,15 +285,15 @@ def malPlace(n, ligne, intervalleY):
 
 
 
-def verification_post_jeu(ligne, ligne_total, colonne_total, intervalleY):
+def verification_post_jeu(ligne, ligne_total, colonne_total, intervalleY, repetition):
     ''' Vérifie si le joueurs a gagné ou perdu '''
     global LISTE_JEU, LISTE_CODE, Dict_couleurs
 
     if ligne+1 >= ligne_total:
-        Defaite()
+        Defaite(repetition)
     else:
         if LISTE_JEU[ligne] == LISTE_CODE:
-            Victoire()
+            Victoire(repetition)
         else:
             bien_place = 0
             mal_place = 0
@@ -308,7 +326,7 @@ def creation_cercle(ligne, colonne, intervalleY, intervalleX, couleur):
 
 
 
-def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX, liste_couleurs):
+def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX, liste_couleurs, repetition):
     ''' Permet d'afficher les actions exerçées par le joueurs '''
     global LISTE_JEU_COMPLET, LISTE_JEU, LISTE_CODE, CERCLE, PIONS_BP, PIONS_MP, Dict_couleurs
 
@@ -333,12 +351,43 @@ def Jeu(couleur, ligne_total, colonne_total, intervalleY, intervalleX, liste_cou
         LISTE_JEU[ligne-1].append(couleur)
         Colonne = colonne_total-1
         Ligne = ligne-1
-        print(LISTE_CODE, LISTE_JEU) # test 
+        # print(LISTE_CODE, LISTE_JEU) # TEST
         creation_cercle(Ligne, Colonne, intervalleY, intervalleX, couleur)
-        verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
+        verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY, repetition)
         pionsBP = len(PIONS_BP[Ligne]) - PIONS_BP[Ligne].count(0)
         pionsMP = len(PIONS_MP[Ligne]) - PIONS_MP[Ligne].count(0)
         help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs, Ligne))
+
+
+
+def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, intervalleX, liste_couleurs, repetition):
+    ''' Permet de recréer la partie précédente si le joueur a décidé de charger la partie précédente '''
+    global LISTE_JEU_COMPLET, LISTE_JEU, CERCLE, LISTE_CODE, Dict_couleurs, Dict_liste_jeu
+
+    Colonne = 0
+    Ligne = 0
+
+    if recuperation is True:
+        LISTE_CODE = Dict_liste_jeu["Liste code"]
+        for i in range(len(LISTE_JEU_COMPLET)):
+            help.config(command=fonctionNull)
+            colonne = (i+1) % colonne_total
+            ligne = int((i+1) // colonne_total)
+            if colonne == 1:
+                Colonne = 0
+                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i])
+            elif colonne != 0:
+                Colonne = colonne-1
+                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
+            else :
+                Colonne = colonne_total-1
+                Ligne = ligne-1
+                creation_cercle(Ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
+                verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY, repetition)
+                pionsBP = len(PIONS_BP[Ligne]) - PIONS_BP[Ligne].count(0)
+                pionsMP = len(PIONS_MP[Ligne]) - PIONS_BP[Ligne].count(0)
+                help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs, Ligne))
+
 
 
 
@@ -375,37 +424,7 @@ def creation_code_secret(colonne, liste_couleurs, joueurs):
 
 
 
-def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, intervalleX, liste_couleurs):
-    ''' Permet de recréer la partie précédente si le joueur a décidé de charger la partie précédente '''
-    global LISTE_JEU_COMPLET, LISTE_JEU, CERCLE, LISTE_CODE, Dict_couleurs, Dict_liste_jeu
-
-    Colonne = 0
-    Ligne = 0
-
-    if recuperation is True:
-        LISTE_CODE = Dict_liste_jeu["Liste code"]
-        for i in range(len(LISTE_JEU_COMPLET)):
-            help.config(command=fonctionNull)
-            colonne = (i+1) % colonne_total
-            ligne = int((i+1) // colonne_total)
-            if colonne == 1:
-                Colonne = 0
-                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i])
-            elif colonne != 0:
-                Colonne = colonne-1
-                creation_cercle(ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
-            else :
-                Colonne = colonne_total-1
-                Ligne = ligne-1
-                creation_cercle(Ligne, Colonne, intervalleY, intervalleX, LISTE_JEU_COMPLET[i]) 
-                verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
-                pionsBP = len(PIONS_BP[Ligne]) - PIONS_BP[Ligne].count(0)
-                pionsMP = len(PIONS_MP[Ligne]) - PIONS_BP[Ligne].count(0)
-                help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs, Ligne))
-
-
-
-def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
+def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation, repetition):
     '''Permet de démarrer le jeu à 2 joueurs'''
     global LISTE_CODE, CERCLE, CERCLE2, PIONS_BP, PIONS_MP, JOUEURS, LISTE_BOUTTONS, Dict_couleurs
 
@@ -442,19 +461,19 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
     x2 = x1+ (175/colonne)
     creation_grille(x1, x2, y1, y2, 1, colonne, 0, (175/colonne))
 
-    Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX, liste_couleurs) # Création du jeu à partir des éventuelles données récupérées
+    Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX, liste_couleurs, repetition) # Création du jeu à partir des éventuelles données récupérées
 
     b = 0  # Création des boûtons
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
-            Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs)
+            Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs, repetition)
         LISTE_BOUTTONS[n].configure(text="●", font=("Calibri", "8"), bg=liste_couleurs[n], command=fonction_lambda)
         LISTE_BOUTTONS[n].grid_configure(row=8, column=b)
         b += 1
 
 
 
-def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation):
+def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation, repetition):
     '''Permet de démarrer le jeu à 1 joueur'''
     global LISTE_CODE, CERCLE, CERCLE2, PIONS_BP, PIONS_MP, JOUEURS, LISTE_BOUTTONS, Dict_couleurs
 
@@ -491,15 +510,16 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
     x2 = x1+ (175/colonne)
     creation_grille(x1, x2, y1, y2, 1, colonne, 0, (175/colonne))
 
-    Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX, liste_couleurs) # Création du jeu à partir des éventuelles données récupérées
+    Recuperation(recuperation, ligne, colonne, intervalleY, intervalleX, liste_couleurs, repetition) # Création du jeu à partir des éventuelles données récupérées
 
     b = 0  # Création des boûtons
     for n in range(nb_couleurs):
         def fonction_lambda(a=liste_couleurs[n]):
-            Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs)
+            Jeu(a, ligne, colonne, intervalleY, intervalleX, liste_couleurs, repetition)
         LISTE_BOUTTONS[n].config(text="●", font=("Calibri", "8"), bg=liste_couleurs[n], command=fonction_lambda)
         LISTE_BOUTTONS[n].grid(row=8, column=b)
         b += 1
+
 
 
 ### Inspiré de https://pynative.com/python-check-user-input-is-number-or-string/ ###
@@ -512,7 +532,8 @@ def vérifEntrees(valeur):
     return condition
 
 
-def Partie(liste_couleurs, ligne, colonne):
+
+def Partie(liste_couleurs, ligne, colonne, repetition):
     ''' Permet de choisir les différents paramètres de la partie'''
     global JOUEURS
 
@@ -522,11 +543,11 @@ def Partie(liste_couleurs, ligne, colonne):
     if JOUEURS == 1: 
         intervalleX = 280/colonne
         intervalleY = 480/ligne
-        unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation = True)
+        unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, True, repetition)
     elif JOUEURS == 2:
         intervalleX = 280/colonne
         intervalleY = 480/ligne
-        deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperation = True)
+        deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, True, repetition)
     else:
         mode_classique = input("Voulez-vous faire une partie en mode classique ? (taper 'oui' ou n'importe quoi d'autre)\n")
         if mode_classique == "oui":
@@ -548,16 +569,16 @@ def Partie(liste_couleurs, ligne, colonne):
         intervalleX = 280/Colonne
         intervalleY = 480/Ligne
 
-        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), \
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, False, repetition), \
                               font=("Calibri", "16"), bg="snow", cursor="cross", activebackground="black", activeforeground="white", border=8)
         mode_un_joueur.grid(row=2, column=5)
-        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), \
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, False, repetition), \
                                  font=("Calibri", "16"), bg="snow", cursor="cross", activebackground="black", activeforeground="white", border=8)
         mode_deux_joueurs.grid(row=6, column=5)
 
 
 
-def Charger(liste_couleurs):
+def Charger(liste_couleurs, repetition):
     ''' Permet de charger la partie précédente si celle-ci a été sauvegardée '''
     global LISTE_JEU, LISTE_JEU_COMPLET, JOUEURS, Dict_liste_jeu
 
@@ -575,7 +596,7 @@ def Charger(liste_couleurs):
     nb_couleurs = Dict_liste_jeu["Nombre de couleurs"]
     nv_liste_couleurs = liste_couleurs[:nb_couleurs]
 
-    Partie(nv_liste_couleurs, ligne, colonne)  # Lancement de la partie avec les variables modifiées
+    Partie(nv_liste_couleurs, ligne, colonne, repetition)  # Lancement de la partie avec les variables modifiées
 
 
 
@@ -615,9 +636,9 @@ def Accueil(liste_couleurs, repetition):
             LISTE_BOUTTONS[i] = tk.Button(fenetre)
             LISTE_BOUTTONS[i].place(x=1000, y=0)
 
-    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="snow", \
+    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs, repetition), font=("Calibri", "16"), bg="snow", \
                           cursor="cross", activebackground="black", activeforeground="white", border=8)
-    PARTIE.config(text="Partie", command=lambda : Partie(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="snow", \
+    PARTIE.config(text="Partie", command=lambda : Partie(liste_couleurs, 0, 0, repetition), font=("Calibri", "16"), bg="snow", \
                   cursor="cross", activebackground="black", activeforeground="white", border=8)
 
 
