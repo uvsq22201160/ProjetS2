@@ -1,4 +1,3 @@
-- Régler le problème suivant : une erreur apparait lorsqu'on a finit le jeu et qu'on le relance (problème d'initialisation de "LISTE_BOUTTONS" dans la fonction unJoueur ou deux Joueurs)
 - Créer une troisième fonction IA où seul une IA joue 
 - Compléter le README avec les règles du jeu (comment on y joue, etc.)
-- Demander à l'utilisateur s'il veut jouer en mode classique au préalable
+
