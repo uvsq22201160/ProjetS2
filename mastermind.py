@@ -62,8 +62,8 @@ perdu.place(x=1000, y=0)
 
 CHARGER_PARTIE = tk.Button(fenetre)
 CHARGER_PARTIE.grid(row=2, column=5)
-PARTIE_PERSONNALISE = tk.Button(fenetre)
-PARTIE_PERSONNALISE.grid(row=6, column=5)
+PARTIE = tk.Button(fenetre)
+PARTIE.grid(row=6, column=5)
 
 for i in range(15):
     LISTE_BOUTTONS[i] = tk.Button(fenetre)
@@ -160,11 +160,14 @@ def Menu(ligne, colonne, nb_couleurs):
     help.destroy()
     canvas.delete("all")
 
-    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Calibri", "18"), bg="black", fg="snow")
+    sauvegarder.config(text="Souhaitez-vous sauvegarder ?", font=("Calibri", "18"), bg="black", fg="snow", \
+                       cursor="cross", activebackground="black", activeforeground="white", border=3)
     sauvegarder.grid_configure(row=3, column=5)
-    sauvegarder_oui.config(text="Oui", font=("Calibri", "16"), bg="snow", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs))
+    sauvegarder_oui.config(text="Oui", font=("Calibri", "16"), bg="snow", command=lambda : Sauvegarde(ligne, colonne, nb_couleurs), \
+                           cursor="cross", activebackground="black", activeforeground="white", border=3)
     sauvegarder_oui.grid_configure(row=5, column=4)
-    sauvegarder_non.config(text="Non", font=("Calibri", "16"), bg="snow", command=PasdeSauvegarde)
+    sauvegarder_non.config(text="Non", font=("Calibri", "16"), bg="snow", command=PasdeSauvegarde, \
+                           cursor="cross", activebackground="black", activeforeground="white", border=3)
     sauvegarder_non.grid_configure(row=5, column=6)
 
 
@@ -415,11 +418,14 @@ def deuxJoueurs(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recupe
 
     mode_un_joueur.destroy() # Initialisation des boûtons
     mode_deux_joueurs.destroy()
-    menu.config(text="MENU", font=("Calibri", "12"), bg="snow", command=lambda : Menu(ligne, colonne, nb_couleurs))
+    menu.config(text="MENU", font=("Calibri", "12"), bg="snow", command=lambda : Menu(ligne, colonne, nb_couleurs), \
+                cursor="cross", activebackground="black", activeforeground="white", border=3)
     menu.place_configure(x=40, y=5)
-    retour.config(text="←", font=("Calibri", "12"), bg="snow", command=lambda : Retour(colonne))
+    retour.config(text="←", font=("Calibri", "12"), bg="snow", command=lambda : Retour(colonne), \
+                  cursor="cross", activebackground="black", activeforeground="white", border=3)
     retour.place_configure(x=10, y=5)
-    help.config(text="?", font=("Calibri", "12"), bg="snow", command=fonctionNull)
+    help.config(text="?", font=("Calibri", "12"), bg="snow", \
+                cursor="cross", activebackground="black", activeforeground="white", border=3)
     help.place_configure(x=400, y=5)
 
     creation_code_secret(colonne, liste_couleurs, joueurs = 2) # Création du code secret
@@ -461,11 +467,14 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
 
     mode_un_joueur.destroy() # Initialisation des boûtons
     mode_deux_joueurs.destroy()
-    retour.config(text="←", font=("Calibri", "12"), bg="snow", command=lambda: Retour(colonne))
+    retour.config(text="←", font=("Calibri", "12"), bg="snow", command=lambda: Retour(colonne), \
+                  cursor="cross", activebackground="black", activeforeground="white", border=3)
     retour.place_configure(x=10, y=5)
-    menu.config(text="MENU", font=("Calibri", "12"), bg="snow", command=lambda : Menu(ligne, colonne, nb_couleurs))
+    menu.config(text="MENU", font=("Calibri", "12"), bg="snow", command=lambda : Menu(ligne, colonne, nb_couleurs), \
+                cursor="cross", activebackground="black", activeforeground="white", border=3)
     menu.place_configure(x=50, y=5)
-    help.config(text="?", font=("Calibri", "12"), bg="snow")
+    help.config(text="?", font=("Calibri", "12"), bg="snow", \
+                cursor="cross", activebackground="black", activeforeground="white", border=3)
     help.place_configure(x=400, y=5)
 
     creation_code_secret(colonne, liste_couleurs, joueurs = 1) # Création du code secret
@@ -496,19 +505,19 @@ def unJoueur(liste_couleurs, ligne, colonne, intervalleY, intervalleX, recuperat
 ### Inspiré de https://pynative.com/python-check-user-input-is-number-or-string/ ###
 def vérifEntrees(valeur):
     try:
-        entree = int(valeur)
+        int(valeur)
         condition = True
     except ValueError:
         condition = False
     return condition
 
 
-def Partie_personnalise(liste_couleurs, ligne, colonne):
+def Partie(liste_couleurs, ligne, colonne):
     ''' Permet de choisir les différents paramètres de la partie'''
     global JOUEURS
 
     CHARGER_PARTIE.destroy()
-    PARTIE_PERSONNALISE.destroy()
+    PARTIE.destroy()
 
     if JOUEURS == 1: 
         intervalleX = 280/colonne
@@ -539,9 +548,11 @@ def Partie_personnalise(liste_couleurs, ligne, colonne):
         intervalleX = 280/Colonne
         intervalleY = 480/Ligne
 
-        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="snow")
+        mode_un_joueur.config(text="1 JOUEUR", command=lambda : unJoueur(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), \
+                              font=("Calibri", "16"), bg="snow", cursor="cross", activebackground="black", activeforeground="white", border=8)
         mode_un_joueur.grid(row=2, column=5)
-        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), font=("Calibri", "16"), bg="snow")
+        mode_deux_joueurs.config(text="2 JOUEURS", command=lambda : deuxJoueurs(couleurs, Ligne, Colonne, intervalleY, intervalleX, recuperation = False), \
+                                 font=("Calibri", "16"), bg="snow", cursor="cross", activebackground="black", activeforeground="white", border=8)
         mode_deux_joueurs.grid(row=6, column=5)
 
 
@@ -564,13 +575,13 @@ def Charger(liste_couleurs):
     nb_couleurs = Dict_liste_jeu["Nombre de couleurs"]
     nv_liste_couleurs = liste_couleurs[:nb_couleurs]
 
-    Partie_personnalise(nv_liste_couleurs, ligne, colonne)  # Lancement de la partie avec les variables modifiées
+    Partie(nv_liste_couleurs, ligne, colonne)  # Lancement de la partie avec les variables modifiées
 
 
 
 def Accueil(liste_couleurs, repetition):
     ''' Permet de créer le menu '''
-    global PARTIE_PERSONNALISE, CHARGER_PARTIE, LISTE_BOUTTONS
+    global PARTIE, CHARGER_PARTIE, LISTE_BOUTTONS
     global mode_un_joueur, mode_deux_joueurs, retour, menu, help, sauvegarder, sauvegarder_oui, sauvegarder_non, gagne, perdu
 
     if repetition == 1:  # Si la fenêtre est lancée une deuxième fois, reinitialisé tous les boutons et "label"
@@ -597,15 +608,17 @@ def Accueil(liste_couleurs, repetition):
 
         CHARGER_PARTIE = tk.Button(fenetre)
         CHARGER_PARTIE.grid(row=2, column=5)
-        PARTIE_PERSONNALISE = tk.Button(fenetre)
-        PARTIE_PERSONNALISE.grid(row=6, column=5)
+        PARTIE = tk.Button(fenetre)
+        PARTIE.grid(row=6, column=5)
 
         for i in range(15):
             LISTE_BOUTTONS[i] = tk.Button(fenetre)
             LISTE_BOUTTONS[i].place(x=1000, y=0)
 
-    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="snow")
-    PARTIE_PERSONNALISE.config(text="Partie", command=lambda : Partie_personnalise(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="snow")
+    CHARGER_PARTIE.config(text="Charger partie précédente", command=lambda : Charger(liste_couleurs), font=("Calibri", "16"), bg="snow", \
+                          cursor="cross", activebackground="black", activeforeground="white", border=8)
+    PARTIE.config(text="Partie", command=lambda : Partie(liste_couleurs, ligne=0, colonne=0), font=("Calibri", "16"), bg="snow", \
+                  cursor="cross", activebackground="black", activeforeground="white", border=8)
 
 
 Accueil(LISTE_COULEURS, repetition = 0) # Initialise le menu
