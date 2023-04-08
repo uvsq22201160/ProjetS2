@@ -1,1 +1,17 @@
-{"Liste du jeu 2D": [["blue", "blue", "green", "green"], ["yellow", "yellow", "purple", "purple"], ["black", "yellow", "cyan", "green"], [], []], "Liste du jeu complet": ["blue", "blue", "green", "green", "yellow", "yellow", "purple", "purple", "black", "yellow", "cyan", "green"], "Liste code": ["black", "yellow", "cyan", "green"], "ligne": 12, "colonne": 4, "Nombre de couleurs": 8, "Joueurs": 1}
+{
+ "Liste du jeu 2D": [
+  []
+ ],
+ "Liste du jeu complet": [],
+ "Liste code": [
+  "orange",
+  "blue",
+  "pink",
+  "pink"
+ ],
+ "ligne": 12,
+ "colonne": 4,
+ "Nombre de couleurs": 8,
+ "Joueurs": 1,
+ "Fin de partie": 0
+}
