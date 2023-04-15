@@ -1,17 +1,115 @@
 {
  "Liste du jeu 2D": [
+  [
+   "blue",
+   "blue",
+   "green",
+   "green"
+  ],
+  [
+   "yellow",
+   "yellow",
+   "purple",
+   "purple"
+  ],
+  [
+   "blue",
+   "blue",
+   "purple",
+   "purple"
+  ],
+  [
+   "blue",
+   "purple",
+   "yellow",
+   "orange"
+  ],
+  [
+   "blue",
+   "green",
+   "purple",
+   "orange"
+  ],
+  [
+   "blue",
+   "green",
+   "purple",
+   "purple"
+  ],
+  [
+   "blue",
+   "pink",
+   "green",
+   "purple"
+  ],
+  [
+   "blue",
+   "pink",
+   "purple",
+   "green"
+  ],
+  [
+   "blue",
+   "black",
+   "purple",
+   "green"
+  ],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
   []
  ],
- "Liste du jeu complet": [],
- "Liste code": [
+ "Liste du jeu complet": [
+  "blue",
+  "blue",
+  "green",
+  "green",
+  "yellow",
+  "yellow",
+  "purple",
+  "purple",
+  "blue",
+  "blue",
+  "purple",
+  "purple",
+  "blue",
+  "purple",
+  "yellow",
   "orange",
   "blue",
+  "green",
+  "purple",
+  "orange",
+  "blue",
+  "green",
+  "purple",
+  "purple",
+  "blue",
   "pink",
-  "pink"
+  "green",
+  "purple",
+  "blue",
+  "pink",
+  "purple",
+  "green",
+  "blue",
+  "black",
+  "purple",
+  "green"
+ ],
+ "Liste code": [
+  "blue",
+  "black",
+  "purple",
+  "green"
  ],
  "ligne": 12,
  "colonne": 4,
  "Nombre de couleurs": 8,
  "Joueurs": 1,
- "Fin de partie": 0
+ "Fin de partie": 2
 }
