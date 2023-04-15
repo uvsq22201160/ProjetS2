@@ -383,6 +383,7 @@ def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, interval
     if recuperation is True:
         LISTE_CODE = Dict_liste_jeu["Liste code"]
         for i in range(len(LISTE_JEU_COMPLET)):
+            help.config(command = fonctionNull)
             colonne = (i+1) % colonne_total
             ligne = int((i+1) // colonne_total)
             if colonne == 1:
@@ -398,7 +399,7 @@ def Recuperation(recuperation, ligne_total, colonne_total, intervalleY, interval
                 verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY)
                 if not verification_post_jeu(Ligne, ligne_total, colonne_total, intervalleY) == "fin":
                     pionsBP = len(PIONS_BP[Ligne]) - PIONS_BP[Ligne].count(0)
-                    pionsMP = len(PIONS_MP[Ligne]) - PIONS_BP[Ligne].count(0)
+                    pionsMP = len(PIONS_MP[Ligne]) - PIONS_MP[Ligne].count(0)
                     help.config(command=lambda : Help(pionsBP, pionsMP, LISTE_JEU[Ligne], liste_couleurs, Ligne))
 
 
