@@ -4,10 +4,34 @@
 URL : https://github.com/uvsq22201160/ProjetS2/
 
 # Groupe : LDDMP
-Gaël FERREIRA RODRIGUEZ, Elise MOULIN, César PITIGLIANO, Noel-Marie N'dri
+Gaël FERREIRA RODRIGUEZ, Elise MOULIN, César PITIGLIANO, Noel-Marie N'DRI
 
 # Utilisation du programme
 Afin de pouvoir bénéficier du jeu Mastermind, veuillez télécharger les documents : [mastermind.py](https://github.com/uvsq22201160/ProjetS2/blob/main/mastermind.py) et [sauvegarde.py](https://github.com/uvsq22201160/ProjetS2/blob/main/sauvegarde.py). Veuillez au préalable vérifier que le document sauvegarde.py est vide. Une fois le code présent dans votre interface, exécutez-le... et profitez 
 
 # Mastermind : règles du jeu
-Notre travail consistait à mettre en place un programme permettant de jouer au jeu du mastermind Dans ce jeu,un code couleur est aleatoirement généré et il conviendra au(x) joueur(s) de trouver la combinaison  de 4 couleurs générée en 10 essais à partir de 8 couleurs differentes.Apres un essai on affiche pres de la combinaison rentrée des indications representées par des cercles rouges qui indiquent le nombre de couleurs bien placée c'est-à-dire de couleurs présentes au meme position que la combinaison initiale générée.Mais aussi il peut y avoir des cercles blancs qui vont indiquer le nombre de bonnes couleurs choisies présentes dans la combinaison à retrouver mais à des positions differentes .A partir de ces différentes indications, le joueur devra aboutir à la combinaison initiale.De plus il peut se servir d'une aide qui va...
+Le Mastermind est un jeu de réflexion pour deux joueurs, où l'objectif est de deviner une combinaison secrète de couleurs choisie par l'autre joueur. 
+Voici les règles de base* :
+
+-Le joueur qui crée la combinaison secrète(le codificateur) choisit une série de couleurs.
+
+-Le joueur qui devine doit proposer(le décodeur) une combinaison de couleurs ou de chiffres.
+
+-Le joueur qui a créé la combinaison secrète donne à chaque essais des indications sur le code. 
+    
+    Ces dernières sont données grâce à des pions rouges ou blancs :
+
+-un pion rouge signifie qu'un élément de la proposition à deviner est non seulement de la bonne couleur mais aussi à la bonne place.
+
+-un pion blanc signifie qu'un élément de la proposition à decoder est de la bonne couleur mais n'est pas situé à la bonne position.
+
+-le décodeur doit ainsi utiliser les différents indices qui lui sont donnés après chaque essai poour réajuster sa prochaine tentative.
+
+-le but de ce jeu est de trouver par déductions successives la combinaison de couleurs donnée par le codificateur en un nombre limité d'essais
+
+-Enfin,une partie se termine lorsque le joueur qui devine parvient à trouver la combinaison secrète ou atteint le nombre maximal d'essais autorisés
+    
+
+
+
+*Selon les versions du jeu, les paramètres de base (nombres de couleures différentes, nombres de couleures dans le code, nombre d'essais...) peuvent varier.
