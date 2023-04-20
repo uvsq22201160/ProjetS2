@@ -7,60 +7,23 @@
    "green"
   ],
   [
+   "blue",
+   "blue",
+   "purple",
+   "purple"
+  ],
+  [
    "yellow",
    "yellow",
-   "purple",
-   "purple"
-  ],
-  [
-   "blue",
-   "blue",
-   "purple",
-   "purple"
-  ],
-  [
-   "blue",
-   "purple",
    "yellow",
-   "orange"
+   "yellow"
   ],
   [
-   "blue",
-   "green",
-   "purple",
-   "orange"
+   "orange",
+   "orange",
+   "yellow",
+   "yellow"
   ],
-  [
-   "blue",
-   "green",
-   "purple",
-   "purple"
-  ],
-  [
-   "blue",
-   "pink",
-   "green",
-   "purple"
-  ],
-  [
-   "blue",
-   "pink",
-   "purple",
-   "green"
-  ],
-  [
-   "blue",
-   "black",
-   "purple",
-   "green"
-  ],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
   []
  ],
  "Liste du jeu complet": [
@@ -68,48 +31,28 @@
   "blue",
   "green",
   "green",
+  "blue",
+  "blue",
+  "purple",
+  "purple",
   "yellow",
   "yellow",
-  "purple",
-  "purple",
-  "blue",
-  "blue",
-  "purple",
-  "purple",
-  "blue",
-  "purple",
+  "yellow",
   "yellow",
   "orange",
-  "blue",
-  "green",
-  "purple",
   "orange",
-  "blue",
-  "green",
-  "purple",
-  "purple",
-  "blue",
-  "pink",
-  "green",
-  "purple",
-  "blue",
-  "pink",
-  "purple",
-  "green",
-  "blue",
-  "black",
-  "purple",
-  "green"
+  "yellow",
+  "yellow"
  ],
  "Liste code": [
-  "blue",
-  "black",
-  "purple",
-  "green"
+  "pink",
+  "orange",
+  "pink",
+  "cyan"
  ],
  "ligne": 12,
  "colonne": 4,
  "Nombre de couleurs": 8,
  "Joueurs": 1,
- "Fin de partie": 2
+ "Fin de partie": 0
 }
